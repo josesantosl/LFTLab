@@ -1,0 +1,60 @@
+* MInimizzazione
+
+minimizzare il seguente DFA
+
+|-----+---+---+------------|
+|     | 0 | 1 | comento    |
+|-----+---+---+------------|
+| 0   | 0 | 0 | uguale a 1 |
+| *1  | 0 | 0 | uguale a 0 |
+| *2  | 3 | 0 | uguale a 3 |
+| *3  | 3 | 0 | uguale a 2 |
+| 4   | 1 | 0 |            |
+| ->5 | 2 | 4 |            |
+|-----+---+---+------------|
+
+|--------+-------+-----|
+|        | 0     | 1   |
+|--------+-------+-----|
+| {0}    | {0}   | {0} |
+| *{1}   | {0}   | {0} |
+| *{2,3} | {2,3} | {0} |
+| {4}    | {1}   | {0} |
+| ->{5}  | {2,3} | {4} |
+|--------+-------+-----|
+
+0| |
+1|xx|
+2|xx |
+3|    |
+4|
+-------
+ |12345
+
+** altro
+
+|----+---+---|
+|    | 0 | 1 |
+|----+---+---|
+| 0  | 0 | 0 |
+| *1 | 3 | 4 |
+| *2 | 2 | 0 |
+| *3 | 3 | 0 |
+| *4 | 2 | 4 |
+|----+---+---|
+
+Definire un'espresione sull'alfabeto {a,b,c} che generi il linguaggio delle stringhe 
+in cui la prima _a_, se presente, è precedutta da un numero dispari di b.
+
+
+(c*) (\epsilon + (bb*)(b)(a)) (a+b+c)*
+
+Data l'espressione regolare E = (bcb +c*)* sull'alfabeto {a,b,c}, determinare quale delle
+seguenti stringhe appartiene al linguaggio generato da E.
+*** cbc
+*** bc
+*** TODO cbcbc
+*** bcbcb
+
+** altro
+(as)(a+c+sc)*(sa)

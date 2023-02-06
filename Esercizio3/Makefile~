@@ -1,0 +1,18 @@
+all:
+	javac Parser.java
+	@echo "==== VALID TESTS ===="
+	@echo "simple sum 5 + 2"
+	@echo "5 + 2" > test.txt
+	java Parser
+	@echo "substraction 5 - 2"
+	@echo "5 - 2" > test.txt
+	java Parser
+	@echo "multiplication 5 * 2"
+	@echo "5 * 2" > test.txt
+	java Parser
+	@echo "division 10 / 5"
+	@echo "10 / 5" > test.txt
+	java Parser
+	@echo "==== VALID TESTS ===="
+	@echo "(7 + 3) / 5" > test.txt
+	java Parser

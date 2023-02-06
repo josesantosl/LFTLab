@@ -1,0 +1,7 @@
+assign 300 to d; /*test de commento*//*test del doppio commento*/
+/* comentario multi lineal
+puede durara
+PARA SIEMPREEEEEEEEEE
+*/
+end; //test final final de comentarios
+assign 300 to d;

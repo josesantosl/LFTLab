@@ -1,0 +1,72 @@
+#+title: Esercizio 5
+
+In this exercise we make the translator from out languate _P_ to the Jasmine 
+language. Now we need to set the stack of the assembly
+
+* sum & mult
+  in this exercise we need to load all the numbers in the stack and then execute 
+  multiple time the the function mult or sum, exactly n-1 times.
+
+  so we use +(5 6 7)
+  ldc 5
+  ldc 6
+  ldc 7
+  iadd
+  iadd
+ 
+*** ldc 5 
+
+|---|
+|   |
+|---|
+|   |
+|---|
+| 5 |
+|---|
+*** ldc 6 
+
+|---|
+|   |
+|---|
+| 6 |
+|---|
+| 5 |
+|---|
+
+*** ldc 7 
+
+|---|
+| 7 |
+|---|
+| 6 |
+|---|
+| 5 |
+|---|
+
+*** iadd 
+
+|----|
+|    |
+|----|
+| 13 |
+|----|
+|  5 |
+|----|
+
+*** iadd 
+
+|----|
+|    |
+|----|
+|    |
+|----|
+| 18 |
+|----|
+
+  
+  
+* TODO reparar el codigo del 4.1
+  cambiar las operaciones de resta y division para tener operaciones binarias
+  y no una lista de operaciones 
+
+

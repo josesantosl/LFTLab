@@ -1,0 +1,3 @@
+javac Lexer.java
+test:
+	java Lexer Test.txt
