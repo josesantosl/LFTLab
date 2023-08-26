@@ -3,9 +3,7 @@ import java.util.*;
 
 public class Lexer {
 
-    public static int line = 1;
-    public static boolean comment = false;
-    public static boolean commentLine = false;
+     static int line = 1;
     private char peek = ' ';
     
     private void readch(BufferedReader br) {
@@ -17,17 +15,10 @@ public class Lexer {
     }
 
     public Token lexical_scan(BufferedReader br) {
-        while (peek == ' ' || peek == '\t' || peek == '\n'  || peek == '\r' || comment || commentLine) {
-            if (peek == '\n'){
+        while (peek == ' ' || peek == '\t' || peek == '\n'  || peek == '\r') {
+	    if (peek == '\n'){//salto di linea
+		System.out.println();
 		line++;
-		commentLine=false;
-		//System.out.print("\n"+line+":");
-	    }
-	    if (peek == '*' && comment){
-		readch(br);
-		if(peek == '/'){
-		    comment=false;
-		}
 	    }
             readch(br);
         }
@@ -36,7 +27,6 @@ public class Lexer {
             case '!':
                 peek = ' ';
                 return Token.not;
-	// ... gestire i casi di ( ) [ ] { } + - * / ; , ... //
              case '(':
                 peek = ' ';
                 return Token.lpt;
@@ -70,11 +60,22 @@ public class Lexer {
              case '/':
 		 readch(br);
 		 if(peek=='*'){//start the comment.
-		     comment=true;
-		     return new Token(0);
-		 }else if(peek=='/'){
-		     commentLine=true;
-		     return new Token(0);
+		     boolean comment=true;
+		     while(comment){
+			 readch(br);
+			 if (peek == '*') {
+			     readch(br);
+			     if (peek == '/') {
+				 comment=false;
+				 return lexical_scan(br);
+			     }
+			 }
+		     }
+		 }else if(peek=='/'){//start commentline  
+		     while(peek!='\n'){
+			 readch(br);
+		     }
+		     return lexical_scan(br);
 		 }else{
 		     return Token.div;
 		 }
@@ -205,12 +206,9 @@ public class Lexer {
         try {
             BufferedReader br = new BufferedReader(new FileReader(path));
             Token tok;
-	    System.out.print("1:");
             do {
                 tok = lex.lexical_scan(br);
-		if(tok.tag!=0){
-		    System.out.print(tok+" ");
-		}
+		System.out.print(tok+" ");
             } while (tok.tag != Tag.EOF);
             br.close();
         } catch (IOException e) {e.printStackTrace();}    
