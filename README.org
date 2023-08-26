@@ -1,0 +1,129 @@
+#+title: Riasunto del progetto
+#+author: José Adrian Santos Lertora (pepito)
+
+Faccio questo riassunto come aiuto per fare spiegare meglio questo codice e anche
+per confermare che ho spiegato ogni punto 5 del progetto.
+
+* Token, words & numToken
+un Token è l'oggetto piu piccolo di questo progetto. solo contiene una variabile int
+chiamata _tag_ per riconoscere quale token è ognuno. La clase [[file:Token.java][Token]] ha un'insieme di
+Token gia definiti, quelli che solo sono un simbolo, in questo caso il suo tag è lo
+stesso simbolo in ASCII.
+
+#+BEGIN_SRC java
+	not = new Token('!'),
+	lpt = new Token('('),
+	rpt = new Token(')'),
+	lpq = new Token('['),
+	rpq = new Token(']'),
+	lpg = new Token('{'),
+	rpg = new Token('}'),
+	plus = new Token('+'),
+	minus = new Token('-'),
+	underscore = new Token('_'),
+	mult = new Token('*'),
+	div = new Token('/'),
+	semicolon = new Token(';'),
+	comma = new Token(',');
+#+END_SRC
+|---------------------------+---------+------|
+| Token                     | Pattern | Nome |
+|---------------------------+---------+------|
+| Negazione                 | !       |   33 |
+| Parentesi tonda sinistra  | (       |   40 |
+| Parentesi tonda destra    | )       |   41 |
+| Parentesi quadra sinistra | [       |   91 |
+| Parentesi quadra destra   | ]       |   93 |
+| Parentesi graffa sinistra | {       |  123 |
+| Parentesi graffa destra   | }       |  125 |
+| Somma                     | +       |   43 |
+| sottrazione               | -       |   45 |
+| Moltiplicazione           | *       |   42 |
+| Divisione                 | /       |   47 |
+| Punto e virgola           | ;       |   59 |
+| Virgola                   | ,       |   44 |
+|---------------------------+---------+------|
+
+** Word
+#+BEGIN_SRC java
+public class Word extends Token
+#+END_SRC
+
+La classe [[file:Word.java][Word.java]] viene come estensione di Token. Se per Token solo usavamo un unico
+simbolo, ora in Word noi usiamo un insieme di simboli, o anche parole come si intende
+con il nome. mantiene il _tag_ di Token ma anche aggiunge la stringa _lexeme_, che serve
+per salvare il testo della stessa parola, perche puo succedere che sono lo stesso
+tipo di token ma con testi diversi(come ID o RELOP)
+*** Tag
+Word non usa più il codice ASCII dei simboli, perche usa piu di un simbolo allo stesso
+tempo. Per queste parole dovremo chiedere alla classe [[file:Tag.java][Tag.java]] che contiene tutti i
+codici che ci servono per le parole
+
+|----------------+---------------------------------------+------|
+| Token          | Pattern                               | Nome |
+|----------------+---------------------------------------+------|
+| Numeri         | Costante numerica                     |  256 |
+| Identificatore | Lettera seguita da lettere e cifre    |  257 |
+| Relop          | Operatore relazionale(<,>,<=,>=,==,<> |  258 |
+| Assegnamento   | Assign                                |  259 |
+| To             | to                                    |  260 |
+| Conditional    | conditional                           |  261 |
+| Option         | option                                |  262 |
+| Do             | do                                    |  263 |
+| Else           | else                                  |  264 |
+| While          | while                                 |  265 |
+| Begin          | begin                                 |  266 |
+| End            | end                                   |  267 |
+| Print          | print                                 |  268 |
+| Read           | read                                  |  269 |
+| Disgiunzione   | doppia barra verticale(OR)            |  270 |
+| Congiunzione   | &&                                    |  271 |
+| EOF            | Fine dell'input                       |   -1 |
+|----------------+---------------------------------------+------|
+
+*** Costruttore
+Il suo costruttore è
+#+BEGIN_SRC java
+      public Word(int tag, String s) { super(tag); lexeme=s; }
+#+END_SRC
+
+|-----------+----------|
+| argomento | variable |
+|-----------+----------|
+| tag       | tag      |
+| s         | lexeme   |
+|-----------+----------|
+
+guarda che per il tag usa la funzione _super()_, questo serve per assegnare le
+variabili che sono gia nel costruttore del padre, in questo caso sarebbe al
+costruttore di Token che è
+
+#+BEGIN_SRC java
+    public Token(int t) { tag=t; }
+#+END_SRC
+
+questo sarebbe come fare (penso che se lo fai non ti compila)
+
+#+BEGIN_SRC java
+    public Word(int tag, String s) { new Token(tag); lexeme=s; }
+#+END_SRC
+
+** NumberTok
+#+BEGIN_SRC java
+public class NumberTok extends Token
+#+END_SRC
+
+Anche NumberTok è una estensione di Token. la principale funzione del NumberTok è
+di poter salvare il numero come un valore intero e no una 
+
+* Lexer
+* SymbolTable
+* CodeGenerator & Instruction
+* Translator
+[[file:Translator.java][Translator]] è una espansione del [[file:/../Esercizio3/Parser32.java][Parser]] dell'esercizio 3
+
+* TODO list for this weekend to complete this project
+** WORKING complete the label shares <2023-08-25>
+** WORKING add all the emitCode      <2023-08-26>
+** TODO set correct label list       <2023-09-01>
+** TODO Write the documentation for all the files. <2023-09-04>
