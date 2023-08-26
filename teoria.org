@@ -1,3 +1,4 @@
+#+author: José Santos L.
 * Stringe annullabili
   una stringa è annullabili quando le sue trasformazioni diventano \epsilon.
   nel caso:
