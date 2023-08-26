@@ -27,14 +27,11 @@ public class Parser {
     }
 
     public void start() {
-	// ... completare ...
 	expr();
 	match(Tag.EOF);
-	// ... completare ...
     }
 
     private void expr() {//E
-	// ... completare ...
 	term();
 	exprp();
     }
@@ -43,7 +40,6 @@ public class Parser {
 	switch (look.tag) {
 	case '+':
 	case '-':
-	// ... completare ...
 	    match(look.tag);
 	    term();
 	    exprp();
@@ -64,11 +60,9 @@ public class Parser {
 	    termp();
 	    break;
 	}
-        // ... completare ...
     }
 
     private void fact() {//F
-        // ... completare ...
 	switch(look.tag){
 	case '(':
 	    match('(');

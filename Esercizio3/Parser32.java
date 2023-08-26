@@ -46,8 +46,8 @@ public class Parser32 {
     }
 
     void stat(){
-	switch (look.tag) {
-	case Tag.ASSIGN:
+	switch (look.tag) { 
+	case Tag.ASSIGN: //assign 5 to a,b,c
 	    match(Tag.ASSIGN);
 	    expr();
 	    match(Tag.TO);
@@ -59,10 +59,10 @@ public class Parser32 {
 	    exprlist();
 	    match(']');
 	    break;
-	case Tag.READ:
+	case Tag.READ: //read[a,b,c] 
 	    match(Tag.READ);
 	    match('[');
-	    exprlist();
+	    idlist();
 	    match(']');
 	    break;
 	case Tag.WHILE:
@@ -85,7 +85,7 @@ public class Parser32 {
 		match(Tag.END);
 		break;
 	    default:
-		error("not valid conditional");
+		error("not ended conditional");
 
 	    }
 	    break;
@@ -130,47 +130,27 @@ public class Parser32 {
 	stat();
     }
 
-    /* senza disgiunzione ,congizione e negazione
-    void bexpr(){
-	match(Tag.RELOP);
-	expr();
-	expr();
-    }
-    
-    bexpr con && || !, questo ci chiede un bexprlist*/
     void bexpr(){
 	switch (look.tag) {
-	case Tag.RELOP:
+	case Tag.RELOP: // ==,>=,<=,>,< 
 	    match(Tag.RELOP);
 	    expr();
 	    expr();
 	    break;
-	case Tag.NEGAZIONE:
-	    match(Tag.NEGAZIONE);
+	case '!':  // !true = false | !false = true
+	    match('!');
 	    bexpr();
 	    break;
 	case Tag.AND:
 	case Tag.OR:
-	    match(look.Tag);
-	    match('(');
-	    bexprlist();
-	    match(')');
+	    match(look.tag);
+	    bexpr();
+	    bexpr();
 	    break;
 	default:
 	    error("unexpected boolean expression");
 	}
 
-    }
-    void bexprlist(){
-	bexpr();
-	bexprlistp();
-    }
-    void bexprlistp(){
-	if(look.tag == ','){
-	    match(',');
-	    bexpr();
-	    bexprlistp();
-	}
     }
 
     void expr(){
