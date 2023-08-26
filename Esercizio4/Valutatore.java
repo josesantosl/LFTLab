@@ -12,18 +12,15 @@ public class Valutatore {
     }
    
     void move() { 
-	// come in Esercizio 3.1
 	look = lex.lexical_scan(pbr);
         System.out.print(look+ " ");
     }
 
     void error(String s) { 
-	// come in Esercizio 3.1
 	throw new Error("near line " + lex.line + ": " + s);
     }
 
     void match(int t) {
-	// come in Esercizio 3.1
 	if (look.tag == t) {
 	    if (look.tag != Tag.EOF) move();
 	} else error("syntax error");
@@ -44,9 +41,9 @@ public class Valutatore {
     }
 
     private int expr() { 
-	int term_val, exprp_i, exprp_val;
-	exprp_i   = term();
-	exprp_val = exprp(exprp_i);
+	int term_val,exprp_val;
+	term_val   = term();
+	exprp_val = exprp(term_val);
 	
 	return exprp_val;
     }
@@ -57,14 +54,16 @@ public class Valutatore {
 	switch (look.tag) {
 	case '+':
             match('+');
-            term_val = term();
-            exprp_val = exprp(exprp_i + term_val);
+            term_val = term(); 
+	    exprp_i = exprp_i + term_val;
+	    exprp_val = exprp(exprp_i); 
             break;
 
 	case '-':
 	    match('-');
 	    term_val = term();
-            exprp_val = exprp(exprp_i - term_val);
+	    exprp_i = exprp_i - term_val;
+            exprp_val = exprp(exprp_i);
             break;
 	default:
 	    exprp_val = exprp_i;
@@ -75,28 +74,27 @@ public class Valutatore {
     }
 
     private int term() { 
-	int term_val, termp_i;
 
-	termp_i =fact();
-	term_val=termp(termp_i);
+	int fact_val = fact();
+	int term_val = termp(fact_val);
 	return term_val;
 	
     }
     
-    private int termp(int termp_i) { 
-	int termp_val,factor;
+    private int termp(int termp_i) {
+	int termp_val,fact_val;
 
 	switch (look.tag) {
 	case '*':
 	    match('*');
-	    factor   = fact();
-	    termp_i  = termp_i * factor;
+	    fact_val   = fact();
+	    termp_i  = termp_i * fact_val;
 	    termp_val= termp(termp_i);
 	    break;
 	case '/':
 	    match('/');
-	    factor   = fact();
-	    termp_i  = termp_i / factor;
+	    fact_val   = fact();
+	    termp_i  = termp_i / fact_val;
 	    termp_val= termp(termp_i);
 	    break;
  	default:
@@ -120,7 +118,7 @@ public class Valutatore {
 	    match(Tag.NUM);
 	    break;
 	default:
-	    error("invalid factor");
+	    error("invalid fact");
 	    fact_val=0;
 	}
 	return fact_val;
