@@ -18,7 +18,7 @@ public class Translator { // Un Parser32 adattato.
     void move() {
 	look = lex.lexical_scan(pbr);
 
-	if(look.tag == ';')
+	if(look.tag == ';' || look.tag == -1)
 	    System.out.println(look);
 	else
 	    System.out.print(look+ " ");
@@ -42,9 +42,11 @@ public class Translator { // Un Parser32 adattato.
 
         int proglabel = code.newLabel();
 	statlist(proglabel);
+	match(Tag.EOF);
+
+	code.emit(OpCode.GOto,proglabel);
         code.emitLabel(proglabel);
 
-	match(Tag.EOF);
 
         try {
 	    code.toJasmin();
@@ -54,20 +56,26 @@ public class Translator { // Un Parser32 adattato.
 	
     }
 
-    private void statlist(int lnext){
-	stat(lnext);
+    private void statlist(int labelAttuale){
+	stat(labelAttuale);
+	int lnext = code.newLabel();
+	code.emit(OpCode.GOto,lnext);
+	code.emitLabel(lnext);
 	statlistp(lnext);
     }
 
-    private void statlistp(int lnext){
+    private void statlistp(int labelAttuale){
 	if(look.tag == ';'){
 	    match(';');
-	    stat(lnext);
+	    stat(labelAttuale);
+	    int lnext = code.newLabel();
+	    code.emit(OpCode.GOto,lnext);
+	    code.emitLabel(lnext);
 	    statlistp(lnext);
 	}
     }
 
-    private void stat(int lnext){
+    private void stat(int labelattuale){
 	switch (look.tag) {
 	case Tag.ASSIGN:
 	    match(Tag.ASSIGN);
@@ -89,14 +97,12 @@ public class Translator { // Un Parser32 adattato.
 	    break;
 	case Tag.WHILE:
 	    match(Tag.WHILE);
-	    int whilelabel = code.newLabel();
 	    int endwhile   = code.newLabel();
 	    match('(');
-	    code.emitLabel(whilelabel);
 	    bexpr(endwhile);
 	    match(')');
-	    stat(lnext);
-	    code.emit(OpCode.GOto,whilelabel);
+	    stat(labelattuale);
+	    code.emit(OpCode.GOto,labelattuale);
 	    code.emitLabel(endwhile);
 	    break;
 	case Tag.COND:
@@ -107,7 +113,7 @@ public class Translator { // Un Parser32 adattato.
 	    switch (look.tag) {
 	    case Tag.ELSE:
 		match(Tag.ELSE);
-		stat(lnext);
+		stat(labelattuale);
 	    case Tag.END:
 		match(Tag.END);
 		break;
@@ -118,7 +124,7 @@ public class Translator { // Un Parser32 adattato.
 	    break;
 	case '{':
 	    match('{');
-	    statlist(lnext);
+	    statlist(labelattuale);
 	    match('}');
 	    break;
 	default:
@@ -129,7 +135,7 @@ public class Translator { // Un Parser32 adattato.
 	if(look.tag == Tag.ID){
 	    int address = st.lookupAddress(look);
 	    if (address == -1) {
-		st.insert(((Word)look).lexeme,count++);
+		st.insert(((Word)look).lexeme,count);
 		address = count;
 	    }
 
@@ -138,6 +144,7 @@ public class Translator { // Un Parser32 adattato.
 	    }
 	    code.emit(OpCode.istore,address);
 	    match(Tag.ID);
+	    count++;
 	    idlistp(op);
 	}else{
 	    error("no identifier was found.");
@@ -149,7 +156,7 @@ public class Translator { // Un Parser32 adattato.
 	    if(look.tag == Tag.ID){
 		int address = st.lookupAddress(look);
 		if (address == -1) {
-		    st.insert(((Word)look).lexeme,count++);
+		    st.insert(((Word)look).lexeme,count);
 		    address = count;
 		}
 
@@ -170,6 +177,7 @@ public class Translator { // Un Parser32 adattato.
 	optitem();
 	optlistp();
     }
+
     private void optlistp(){
 	if(look.tag == Tag.OPTION){
 	    optitem();
@@ -210,7 +218,7 @@ public class Translator { // Un Parser32 adattato.
 	    case "==":
 		code.emit(OpCode.if_icmpeq,truelabel);
 		break;
-	    case "<>"
+	    case "<>":
 		code.emit(OpCode.if_icmpne,truelabel);
 		break;
 	    }
@@ -218,7 +226,7 @@ public class Translator { // Un Parser32 adattato.
 	    break;
 	case '!':
 	    match('!');
-	    expr();
+	    //bexpr();
 	    code.emit(OpCode.ineg, truelabel);
 	    break;
 	case Tag.AND:
@@ -241,10 +249,16 @@ public class Translator { // Un Parser32 adattato.
     private void expr(){
 	switch (look.tag) {
 	case '+':
-	case '*':
-	    match(look.tag);
+	    match('+');
 	    match('(');
-	    exprlist(look.tag);
+	    exprlist('+');
+	    match(')');
+	    break;
+
+	case '*':
+	    match('*');
+	    match('(');
+	    exprlist('*');
 	    match(')');
 	    break;
 	case '-':
@@ -252,6 +266,7 @@ public class Translator { // Un Parser32 adattato.
 	    expr();
 	    expr();
 	    code.emit(OpCode.isub);
+	    break;
 	case '/':
 	    match('/');
 	    expr();
@@ -265,6 +280,7 @@ public class Translator { // Un Parser32 adattato.
 	    int num = ((NumberTok)look).num;
 	    code.emit(OpCode.ldc,num);
 	    match(Tag.NUM);
+	    break;
 	case Tag.ID:
 	    /*Questo e' l'unico momento di lettura dei SymbolTable*/
 	    int address = st.lookupAddress(look);
@@ -307,8 +323,7 @@ public class Translator { // Un Parser32 adattato.
 		code.emit(OpCode.invokestatic,1); // invokestatic 1 = print
 		break;
 	    default:
-		error("Invalid operator ");
-		
+		error("invalid Operator");
 	    }
 	    exprlistp(op);
 	}
@@ -322,7 +337,7 @@ public class Translator { // Un Parser32 adattato.
 	    BufferedReader br = new BufferedReader(new FileReader(path));
 	    Translator parser = new Translator(lex, br);
 	    parser.prog();
-	    System.out.println(path+" tradotto correttamente.");
+	    //System.out.println(path+" tradotto correttamente.");
 	    br.close();
 	} catch (IOException e) {e.printStackTrace();}
     }
