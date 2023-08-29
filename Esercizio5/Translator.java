@@ -25,7 +25,7 @@ public class Translator { // Un Parser32 adattato.
     }
 
     private void error(String s) {
-	throw new Error("near line " + lex.line + ":"+ look +": " + s);
+	throw new Error("\nnear line " + lex.line + ":"+ look +": " + s);
     }
 
     private void match(int t) {
@@ -40,19 +40,19 @@ public class Translator { // Un Parser32 adattato.
 	    error("file vuoto");
 	}
 
-        int proglabel = code.newLabel();
+    int proglabel = code.newLabel();
 	statlist(proglabel);
 	match(Tag.EOF);
 
 	code.emit(OpCode.GOto,proglabel);
-        code.emitLabel(proglabel);
+    code.emitLabel(proglabel);
 
 
         try {
-	    code.toJasmin();
+			code.toJasmin();
         }catch(java.io.IOException e) {
-	    System.err.println("Error writting the Output.j");
-	}
+			System.err.println("Error writting the Output.j");
+		}
 	
     }
 
@@ -66,12 +66,12 @@ public class Translator { // Un Parser32 adattato.
 
     private void statlistp(int labelAttuale){
 	if(look.tag == ';'){
-	    match(';');
-	    stat(labelAttuale);
-	    int lnext = code.newLabel();
-	    code.emit(OpCode.GOto,lnext);
-	    code.emitLabel(lnext);
-	    statlistp(lnext);
+		match(';');
+		stat(labelAttuale);
+		int lnext = code.newLabel();
+		code.emit(OpCode.GOto,lnext);
+		code.emitLabel(lnext);
+		statlistp(lnext);
 	}
     }
 
@@ -106,9 +106,11 @@ public class Translator { // Un Parser32 adattato.
 	    code.emitLabel(endwhile);
 	    break;
 	case Tag.COND:
+		int lendCondition = code.newLabel();
+
 	    match(Tag.COND);
 	    match('[');
-	    optlist();
+	    optlist(lendCondition);
 	    match(']');
 	    switch (look.tag) {
 	    case Tag.ELSE:
@@ -116,6 +118,7 @@ public class Translator { // Un Parser32 adattato.
 		stat(labelattuale);
 	    case Tag.END:
 		match(Tag.END);
+		code.emitLabel(lendCondition);
 		break;
 	    default:
 		error("not valid command");
@@ -131,20 +134,19 @@ public class Translator { // Un Parser32 adattato.
 	    error("not valid stat");
 	}
     }
-    private void  idlist(int op){
+    private void idlist(int op){
 	if(look.tag == Tag.ID){
 	    int address = st.lookupAddress(look);
 	    if (address == -1) {
 		st.insert(((Word)look).lexeme,count);
-		address = count;
+		address = count++;
 	    }
 
 	    if (op == Tag.READ) {
 		code.emit(OpCode.invokestatic,0); // invokestatic 0 = read
 	    }
 	    code.emit(OpCode.istore,address);
-	    match(Tag.ID);
-	    count++;
+		match(Tag.ID);
 	    idlistp(op);
 	}else{
 	    error("no identifier was found.");
@@ -157,7 +159,7 @@ public class Translator { // Un Parser32 adattato.
 		int address = st.lookupAddress(look);
 		if (address == -1) {
 		    st.insert(((Word)look).lexeme,count);
-		    address = count;
+		    address = count++;
 		}
 
 		if (op == Tag.READ) {
@@ -173,25 +175,32 @@ public class Translator { // Un Parser32 adattato.
 	}
     }
 
-    private void optlist(){
-	optitem();
-	optlistp();
+    private void optlist(int lendCondition){
+		int lnext = code.newLabel();
+	optitem(lnext,lendCondition);
+	optlistp(lendCondition);
     }
 
-    private void optlistp(){
-	if(look.tag == Tag.OPTION){
-	    optitem();
-	    optlistp();
-	}
+	private void optlistp(int lendCondition){
+		if(look.tag == Tag.OPTION){
+			int lnext = code.newLabel();
+			optitem(lnext,lendCondition);
+			optlistp(lendCondition);
+		}
     }
 
-    private void optitem(){
+    private void optitem(int lnext, int lendCondition){
+	int ltrue = code.newLabel();
 	match(Tag.OPTION);
 	match('(');
-	//bexpr();
+	bexpr(ltrue);
 	match(')');
+	code.emit(OpCode.GOto,lnext);
+	code.emitLabel(ltrue);
 	match(Tag.DO);
-	//stat(lnex); //da riparare come pasare tutti i label
+	stat(lnext);
+	code.emit(OpCode.GOto,lendCondition);
+	code.emitLabel(lnext);
     }
 
     private void bexpr(int truelabel){
@@ -277,7 +286,7 @@ public class Translator { // Un Parser32 adattato.
 	    /*devo fare il cast a NumberTok perche java non sa che il look e'
 	     *un NumberTok e non un semplice Token.
 	    */
-	    int num = ((NumberTok)look).num;
+	    int num = ((NumberTok)look).num; //(numberTok)look dice al look di comportarsi come NumberTok
 	    code.emit(OpCode.ldc,num);
 	    match(Tag.NUM);
 	    break;
@@ -331,14 +340,14 @@ public class Translator { // Un Parser32 adattato.
 
     public static void main(String[] args) {
 
-	Lexer lex = new Lexer();
-	String path = "test.lft";
-	try {
-	    BufferedReader br = new BufferedReader(new FileReader(path));
-	    Translator parser = new Translator(lex, br);
-	    parser.prog();
-	    //System.out.println(path+" tradotto correttamente.");
-	    br.close();
-	} catch (IOException e) {e.printStackTrace();}
+		Lexer lex = new Lexer();
+		String path = "test.lft";
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(path));
+			Translator translator = new Translator(lex, br);
+			translator.prog();
+			//System.out.println(path+" tradotto correttamente.");
+			br.close();
+		} catch (IOException e) {e.printStackTrace();}
     }
 }
