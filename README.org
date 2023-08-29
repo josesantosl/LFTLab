@@ -6,7 +6,7 @@ per confermare che ho spiegato ogni punto 5 del progetto.
 
 * Token, words & numToken
 un Token è l'oggetto piu piccolo di questo progetto. solo contiene una variabile int
-chiamata _tag_ per riconoscere quale token è ognuno. La clase [[file:Token.java][Token]] ha un'insieme di
+chiamata _tag_ per riconoscere quale token è ognuno. La clase [[file:Esercizio5/Token.java][Token]] ha un'insieme di
 Token gia definiti, quelli che solo sono un simbolo, in questo caso il suo tag è lo
 stesso simbolo in ASCII.
 
@@ -49,14 +49,14 @@ stesso simbolo in ASCII.
 public class Word extends Token
 #+END_SRC
 
-La classe [[file:Word.java][Word.java]] viene come estensione di Token. Se per Token solo usavamo un unico
+La classe [[file:Esercizio5/Word.java][Word.java]] viene come estensione di Token. Se per Token solo usavamo un unico
 simbolo, ora in Word noi usiamo un insieme di simboli, o anche parole come si intende
 con il nome. mantiene il _tag_ di Token ma anche aggiunge la stringa _lexeme_, che serve
 per salvare il testo della stessa parola, perche puo succedere che sono lo stesso
 tipo di token ma con testi diversi(come ID o RELOP)
 *** Tag
 Word non usa più il codice ASCII dei simboli, perche usa piu di un simbolo allo stesso
-tempo. Per queste parole dovremo chiedere alla classe [[file:Tag.java][Tag.java]] che contiene tutti i
+tempo. Per queste parole dovremo chiedere alla classe Tag.java contiene tutti i
 codici che ci servono per le parole
 
 |----------------+---------------------------------------+------|
@@ -123,7 +123,7 @@ di poter salvare il numero come un valore intero e no una
 [[file:Translator.java][Translator]] è una espansione del [[file:/../Esercizio3/Parser32.java][Parser]] dell'esercizio 3
 
 * TODO list for this weekend to complete this project
-** WORKING complete the label shares <2023-08-25>
-** WORKING add all the emitCode      <2023-08-26>
-** TODO set correct label list       <2023-09-01>
+** DONE complete the label shares <2023-08-25>
+** DONE add all the emitCode      <2023-08-26>
+** DONE set correct label list       <2023-09-01>
 ** TODO Write the documentation for all the files. <2023-09-04>
