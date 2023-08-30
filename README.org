@@ -11,20 +11,20 @@ Token gia definiti, quelli che solo sono un simbolo, in questo caso il suo tag �
 stesso simbolo in ASCII.
 
 #+BEGIN_SRC java
-	not = new Token('!'),
-	lpt = new Token('('),
-	rpt = new Token(')'),
-	lpq = new Token('['),
-	rpq = new Token(']'),
-	lpg = new Token('{'),
-	rpg = new Token('}'),
-	plus = new Token('+'),
-	minus = new Token('-'),
-	underscore = new Token('_'),
-	mult = new Token('*'),
-	div = new Token('/'),
-	semicolon = new Token(';'),
-	comma = new Token(',');
+not = new Token('!'),
+lpt = new Token('('),
+rpt = new Token(')'),
+lpq = new Token('['),
+rpq = new Token(']'),
+lpg = new Token('{'),
+rpg = new Token('}'),
+plus = new Token('+'),
+minus = new Token('-'),
+underscore = new Token('_'),
+mult = new Token('*'),
+div = new Token('/'),
+semicolon = new Token(';'),
+comma = new Token(',');
 #+END_SRC
 |---------------------------+---------+------|
 | Token                     | Pattern | Nome |
@@ -84,7 +84,7 @@ codici che ci servono per le parole
 *** Costruttore
 Il suo costruttore è
 #+BEGIN_SRC java
-      public Word(int tag, String s) { super(tag); lexeme=s; }
+    public Word(int tag, String s) { super(tag); lexeme=s; }
 #+END_SRC
 
 |-----------+----------|
@@ -99,13 +99,13 @@ variabili che sono gia nel costruttore del padre, in questo caso sarebbe al
 costruttore di Token che è
 
 #+BEGIN_SRC java
-    public Token(int t) { tag=t; }
+public Token(int t) { tag=t; }
 #+END_SRC
 
 questo sarebbe come fare (penso che se lo fai non ti compila)
 
 #+BEGIN_SRC java
-    public Word(int tag, String s) { new Token(tag); lexeme=s; }
+public Word(int tag, String s) { new Token(tag); lexeme=s; }
 #+END_SRC
 
 ** NumberTok
@@ -114,17 +114,33 @@ public class NumberTok extends Token
 #+END_SRC
 
 Anche NumberTok è una estensione di Token. la principale funzione del NumberTok è
-di poter salvare il numero come un valore intero e no una 
+di poter salvare il numero come un valore intero e no una parola.
 
 * Lexer
 * SymbolTable
 * CodeGenerator & Instruction
 * Translator
-[[file:Translator.java][Translator]] è una espansione del [[file:/../Esercizio3/Parser32.java][Parser]] dell'esercizio 3
+[[file:Esercizio5/Translator.java][Translator]] è una espansione del [[file:Esercizio3/Parser32.java][Parser]] dell'esercizio 3, usando la stessa gramatica:
+
+-      <prog> :: <statlist> EOF
+- <startlist> :: <stat> <statlistp>
+- <statlistp> :: ; <stat> <statlistp> |ϵ
+-      <stat> :: assign <expr> to <idlist>
+-             :: print [ <exprlist> ]
+-             :: read [idlist]
+-             :: while ( <bexpr> ) <stat>
+-             :: conditional [ <optilist> ] end
+-             :: conditional [ <optilist> ] else <stat> end
+-    <idlist> :: ID <idlistp>
+-   <idlistp> :: , ID <idlistp> |ϵ
+-  <optilist> :: <optitem> <optilistp>
+- <optilistp> :: <optitem> <optilistp> |ϵ
+-   <optitem> :: option ( <bexpr> ) do <stat>
+
 
 * TODO list for this weekend to complete this project
 ** DONE complete the label shares <2023-08-25>
 ** DONE add all the emitCode      <2023-08-26>
 ** DONE set correct label list       <2023-09-01>
-** TODO Write the documentation for all the files. <2023-09-04>
-** PROJ indent correctly
+** STRT Write the documentation for all the files. <2023-09-04>
+** DONE indent correctly
