@@ -67,6 +67,7 @@ public class Lexer {
                         readch(br);
                         if (peek == '/') {
                             comment=false;
+                            peek=' ';
                             return lexical_scan(br);
                         }
                     }
