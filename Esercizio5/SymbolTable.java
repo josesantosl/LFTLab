@@ -18,14 +18,14 @@ public class SymbolTable {
       un problmea al momento dell'interrogazione.
     */
     public int lookupAddress ( Token t ) {
-	try{
-	if( OffsetMap.containsKey(((Word)t).lexeme))
-	    return OffsetMap.get(((Word)t).lexeme);
-	else
-	    return -1;
-	}catch(ClassCastException e){
-	    System.err.println("error en lookup en el token "+t);
-	    return 0;
-	}
+        try{
+            if( OffsetMap.containsKey(((Word)t).lexeme))
+                return OffsetMap.get(((Word)t).lexeme);
+            else
+                return -1;
+        }catch(ClassCastException e){
+            System.err.println("error en lookup en el token "+t);
+            return 0;
+        }
     }
 }

@@ -120,6 +120,7 @@ di poter salvare il numero come un valore intero e no una parola.
 * SymbolTable
 * CodeGenerator & Instruction
 * Translator
+** grammatica
 [[file:Esercizio5/Translator.java][Translator]] è una espansione del [[file:Esercizio3/Parser32.java][Parser]] dell'esercizio 3, usando la stessa gramatica:
 
 -      <prog> :: <statlist> EOF
@@ -136,7 +137,6 @@ di poter salvare il numero come un valore intero e no una parola.
 -  <optilist> :: <optitem> <optilistp>
 - <optilistp> :: <optitem> <optilistp> |ϵ
 -   <optitem> :: option ( <bexpr> ) do <stat>
-
 
 * TODO list for this weekend to complete this project
 ** DONE complete the label shares <2023-08-25>
