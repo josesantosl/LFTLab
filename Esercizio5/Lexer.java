@@ -17,7 +17,6 @@ public class Lexer {
     public Token lexical_scan(BufferedReader br) {
         while (peek == ' ' || peek == '\t' || peek == '\n'  || peek == '\r') {
             if (peek == '\n'){//salto di linea
-                System.out.println();
                 line++;
             }
             readch(br);
