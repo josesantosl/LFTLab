@@ -136,12 +136,14 @@ public class Translator { // Un Parser32 adattato.
 				address = count++;
 			}
 
-			if (op == Tag.READ) {
-				code.emit(OpCode.invokestatic,0); // invokestatic 0 = read
-			}
 			code.emit(OpCode.istore,address);
 			match(Tag.ID);
-			idlistp(op);
+
+			//if there is another ",ID" we add the number again with iload
+			if (look.tag == ',') {
+				code.emit(OpCode.iload,address);
+				idlistp(op);
+			}
 		}else{
 			error("no identifier was found.");
 		}
