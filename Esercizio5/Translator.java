@@ -97,8 +97,8 @@ public class Translator { // Un Parser32 adattato.
 			match('(');
 			bexpr(endwhile);
 			match(')');
-			stat(labelattuale);
-			code.emit(OpCode.GOto,labelattuale);
+			stat(labelAttuale);
+			code.emit(OpCode.GOto,labelAttuale);
 			code.emitLabel(endwhile);
 			break;
 		case Tag.COND:
@@ -110,7 +110,7 @@ public class Translator { // Un Parser32 adattato.
 			switch (look.tag) {
 			case Tag.ELSE:
 				match(Tag.ELSE);
-				stat(labelattuale);
+				stat(labelAttuale);
 			case Tag.END:
 				match(Tag.END);
 				code.emitLabel(lendCondition);
@@ -121,7 +121,7 @@ public class Translator { // Un Parser32 adattato.
 			break;
 		case '{':
 			match('{');
-			statlist(labelattuale);
+			statlist(labelAttuale);
 			match('}');
 			break;
 		default:
