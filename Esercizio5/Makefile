@@ -5,7 +5,7 @@ main:
 	@javac Translator.java
 	java Translator
 	@echo "---------JASMIN-------------"
-	cat Output.j
+	@cat Output.j
 	@java -jar jasmin.jar Output.j
 	@echo "---------Output-------------"
 	@java Output

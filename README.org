@@ -119,6 +119,72 @@ di poter salvare il numero come un valore intero e no una parola.
 * Lexer
 * SymbolTable
 * CodeGenerator & Instruction
+Il code generator contiene una lista di istruzioni e un contatore.
+#+begin_src java
+LinkedList <Instruction> instructions = new LinkedList <Instruction>();
+int label=0;
+#+end_src
+** Istruzione
+La principale funzione del [[file:Esercizio5/CodeGenerator.java][CodeGenerator]] è quello di emitere le istruzioni che
+controlla _Jasmin_ (Java Bytecode Instructions). Per fare questo si usa la funzione
+emit e la classe Instruction.
+#+begin_src java
+public void emit(OpCode opCode) {
+    instructions.add(new Instruction(opCode));
+}
+
+public void emit(OpCode opCode , int operand) {
+    instructions.add(new Instruction(opCode, operand));
+}
+#+end_src
+
+Queste istruzione vengono create secondo la tabella
+|--------------+-----------------------------------------------------------|
+| Istruzione   | Descrizione                                               |
+|--------------+-----------------------------------------------------------|
+| ldc          | Scrive una costante in cima allo stack.                   |
+| imul         | Moltiplicare due numeri interi                            |
+| ineg         | Negare int                                                |
+| idiv         | Dividere due numeri interi                                |
+| iadd         | Somma due numeri                                          |
+| isub         | Int sottrarre                                             |
+| istore id    | Memorizza il valore int nella variabile id                |
+| ior          | Operazione OR bit a bit tra due numeri                    |
+| iand         | Operazione AND bit a bit tra due numeri                   |
+| iload        | Carica un int da una variabile                            |
+| GOto L       | Salta al label L                                          |
+| if_icmpeq L  | Se i due valori sono uguali salta al label L.             |
+| if_icmple L  | Se value1 è minore o uguale a value2, salta al label L.   |
+| if_icmplt L  | Se value1 è minore a value2, salta al L.                  |
+| if_icmpne L  | Se i due valori sono diversi salta al label L.            |
+| if_icmpge L  | Se value1 è maggiore o uguale a value2, salta al label L. |
+| if_icmpgt L  | Se value1 è maggiore a value2, salta al label L.          |
+| ifne L       | Se il valore è diverso da 0, salta al label L.            |
+| invokestatic | Chiama a un'altro metodo.                                 |
+| dup          | Duplica il valore in cima allo stack.                     |
+| pop          | Scartare il valore in cima allo stack.                    |
+|--------------+-----------------------------------------------------------|
+** Labels
+un'altra funzione importante del CodeGenerator è di emitere i label del codice.
+I label sono delle etichette per difereneziare le diverse sezioni dell codice, e
+sopratutto ci servirà per inidicare con Goto e le condizionali verso a  dove saltare.
+
+per queste cose abbremo le funzione:
+- newLabel :: che ci ritorna il nuovo label disponibile e dopo incrementa il contatore 'label'
+#+begin_src java
+public int newLabel() {
+    return label++;
+}
+#+end_src
+
+- emitLabel :: ci scrive il label specificato come operand in nella lista
+  d'istruzioni.
+#+begin_src java
+public void emitLabel(int operand) {
+    emit(OpCode.label, operand);
+}
+#+end_src
+
 * Translator
 ** grammatica
 [[file:Esercizio5/Translator.java][Translator]] è una espansione del [[file:Esercizio3/Parser32.java][Parser]] dell'esercizio 3, usando la stessa gramatica:
