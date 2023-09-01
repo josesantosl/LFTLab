@@ -67,15 +67,11 @@ public class Translator { // Un Parser32 adattato.
     private void statlistp(int labelAttuale){
 		if(look.tag == ';'){
 			match(';');
-			stat(labelAttuale);
-			int lnext = code.newLabel();
-			code.emit(OpCode.GOto,lnext);
-			code.emitLabel(lnext);
-			statlistp(lnext);
+			statlist(labelAttuale);
 		}
     }
 
-    private void stat(int labelattuale){
+    private void stat(int labelAttuale){
 		switch (look.tag) {
 		case Tag.ASSIGN:
 			match(Tag.ASSIGN);
@@ -154,22 +150,7 @@ public class Translator { // Un Parser32 adattato.
     private void idlistp(int op){
 		if(look.tag == ','){
 			match(',');
-			if(look.tag == Tag.ID){
-				int address = st.lookupAddress(look);
-				if (address == -1) {
-					st.insert(((Word)look).lexeme,count);
-					address = count++;
-				}
-
-				if (op == Tag.READ) {
-					code.emit(OpCode.invokestatic,0); // invokestatic 0 = read
-				}
-				code.emit(OpCode.istore,address);
-				match(Tag.ID);
-				idlistp(op);
-			}else{
-				error("no identifier was found.");
-			}
+			idlist(op);
 		}
     }
 
