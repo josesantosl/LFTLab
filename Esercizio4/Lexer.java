@@ -17,7 +17,6 @@ public class Lexer {
     public Token lexical_scan(BufferedReader br) {
         while (peek == ' ' || peek == '\t' || peek == '\n'  || peek == '\r') {
             if (peek == '\n'){//salto di linea
-                System.out.println();
                 line++;
             }
             readch(br);
@@ -63,12 +62,16 @@ public class Lexer {
                 boolean comment=true;
                 while(comment){
                     readch(br);
-                    if (peek == '*') {
+                    while(peek == '*') {//salto tutti i * fino a trovare il /
                         readch(br);
                         if (peek == '/') {
                             comment=false;
+                            peek=' ';
                             return lexical_scan(br);
                         }
+                    }
+                    if (peek == -1) {
+                        System.err.println("comment not closed");
                     }
                 }
             }else if(peek=='/'){//start commentline
