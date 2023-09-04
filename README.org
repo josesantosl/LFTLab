@@ -189,20 +189,31 @@ public void emitLabel(int operand) {
 ** grammatica
 [[file:Esercizio5/Translator.java][Translator]] è una espansione del [[file:Esercizio3/Parser32.java][Parser]] dell'esercizio 3, usando la stessa gramatica:
 
--      <prog> :: <statlist> EOF
-- <startlist> :: <stat> <statlistp>
-- <statlistp> :: ; <stat> <statlistp> |ϵ
--      <stat> :: assign <expr> to <idlist>
--             :: print [ <exprlist> ]
--             :: read [idlist]
--             :: while ( <bexpr> ) <stat>
--             :: conditional [ <optilist> ] end
--             :: conditional [ <optilist> ] else <stat> end
--    <idlist> :: ID <idlistp>
--   <idlistp> :: , ID <idlistp> |ϵ
--  <optilist> :: <optitem> <optilistp>
-- <optilistp> :: <optitem> <optilistp> |ϵ
--   <optitem> :: option ( <bexpr> ) do <stat>
+-      <prog> → <statlist> EOF
+- <startlist> → <stat> <statlistp>
+- <statlistp> → ; <stat> <statlistp> |ϵ
+-      <stat> → assign <expr> to <idlist>
+-             → print [ <exprlist> ]
+-             → read [idlist]
+-             → while ( <bexpr> ) <stat>
+-             → conditional [ <optilist> ] end
+-             → conditional [ <optilist> ] else <stat> end
+-             → {<statlist>}
+-    <idlist> → ID <idlistp>
+-   <idlistp> → , ID <idlistp> |ϵ
+-  <optilist> → <optitem> <optilistp>
+- <optilistp> → <optitem> <optilistp> |ϵ
+-   <optitem> → option ( <bexpr> ) do <stat>
+-     <bexpr> → RELOP <expr> <expr>
+-             → && <bexpr> <bexpr>
+-             → || <bexpr> <bexpr>
+-             → ! <bexpr>
+-      <expr> → +(<exprlist>)
+-             → *(<exprlist>)
+-             → - <expr> <expr>
+-             → / <expr> <expr>
+-  <exprlist> → <expr> <exprlistp>
+- <exprlistp> → , <expr> <exprlistp> |ϵ
 
 * TODO list for this weekend to complete this project
 ** DONE complete the label shares <2023-08-25>
