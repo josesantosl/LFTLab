@@ -189,30 +189,30 @@ public void emitLabel(int operand) {
 ** grammatica
 [[file:Esercizio5/Translator.java][Translator]] è una espansione del [[file:Esercizio3/Parser32.java][Parser]] dell'esercizio 3, usando la stessa gramatica:
 
--      <[[prog]]> → <statlist> EOF
--  <[[statlist]]> → <stat> <statlistp>
+- <[[prog]]> → <statlist> EOF
+- <[[statlist]]> → <stat> <statlistp>
 - <[[statlistp]]> → ; <stat> <statlistp> |ϵ
--      <[[stat]]> → [[assign]] <expr> to <idlist>
--             → [[print]] [ <exprlist> ]
--             → [[read]] [idlist]
--             → [[while]] ( <bexpr> ) <stat>
--             → [[conditional]] [ <optilist> ] end
--             → [[conditional]] [ <optilist> ] else <stat> end
--             → {<statlist>}
--    <[[idlist]]> → ID <idlistp>
--   <[[idlistp]]> → , ID <idlistp> |ϵ
--  <[[optilist]]> → <optitem> <optilistp>
+- <[[stat]]> → [[assign]] <expr> to <idlist>
+  - → [[print]] [ <exprlist> ]
+  - → [[read]] [idlist]
+  - → [[while]] ( <bexpr> ) <stat>
+  - → [[conditional]] [ <optilist> ] end
+  - → [[conditional]] [ <optilist> ] else <stat> end
+  - → {<statlist>}
+- <[[idlist]]> → ID <idlistp>
+- <[[idlistp]]> → , ID <idlistp> |ϵ
+- <[[optilist]]> → <optitem> <optilistp>
 - <[[optilistp]]> → <optitem> <optilistp> |ϵ
--   <[[optitem]]> → option ( <bexpr> ) do <stat>
--     <[[bexpr]]> → RELOP <expr> <expr>
--             → && <bexpr> <bexpr>
--             → || <bexpr> <bexpr>
--             → ! <bexpr>
--      <[[expr]]> → +(<exprlist>)
--             → *(<exprlist>)
--             → - <expr> <expr>
--             → / <expr> <expr>
--  <[[exprlist]]> → <expr> <exprlistp>
+- <[[optitem]]> → option ( <bexpr> ) do <stat>
+- <[[bexpr]]> → RELOP <expr> <expr>
+  - → && <bexpr> <bexpr>
+  - → || <bexpr> <bexpr>
+  - → ! <bexpr>
+- <[[expr]]> → +(<exprlist>)
+  - → *(<exprlist>)
+  - → - <expr> <expr>
+  - → / <expr> <expr>
+- <[[exprlist]]> → <expr> <exprlistp>
 - <[[exprlistp]]> → , <expr> <exprlistp> | ϵ
 
 ** prog
@@ -258,4 +258,15 @@ private void statlist(int labelAttuale){
     code.emitLabel(lnext);//scrive il label tra le istruzioni
     statlistp(lnext);//continua la lista di stat.
 }
+#+end_src
+
+** statlistp
+Questo qua solo conferma se c'è un *;* (punto e virgola) e fa di nuovo quello di statlist.
+#+begin_src java
+    private void statlistp(int labelAttuale){
+        if(look.tag == ';'){
+            match(';');
+            statlist(labelAttuale);
+        }
+    }
 #+end_src
