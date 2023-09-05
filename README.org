@@ -193,12 +193,12 @@ public void emitLabel(int operand) {
 -  <[[statlist]]> → <stat> <statlistp>
 - <[[statlistp]]> → ; <stat> <statlistp> |ϵ
 -      <[[stat]]> → [[assign]] <expr> to <idlist>
-              \t | [[print]] [ <exprlist> ] \\
-              \t | [[read]] [idlist] \\
-              \t | [[while]] ( <bexpr> ) <stat> \\
-              \t | [[conditional]] [ <optilist> ] end \\
-              \t | [[conditional]] [ <optilist> ] else <stat> end \\
-              \t | {<statlist>} | \\
+-             → [[print]] [ <exprlist> ]
+-             → [[read]] [idlist]
+-             → [[while]] ( <bexpr> ) <stat>
+-             → [[conditional]] [ <optilist> ] end
+-             → [[conditional]] [ <optilist> ] else <stat> end
+-             → {<statlist>}
 -    <[[idlist]]> → ID <idlistp>
 -   <[[idlistp]]> → , ID <idlistp> |ϵ
 -  <[[optilist]]> → <optitem> <optilistp>
@@ -235,4 +235,3 @@ public void emitLabel(int operand) {
 		}
     }
 #+end_src
-* TODO list for this weekend to complete this project
