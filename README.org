@@ -270,3 +270,90 @@ Questo qua solo conferma se c'è un *;* (punto e virgola) e fa di nuovo quello d
         }
     }
 #+end_src
+
+** stat
+qua si riconoscono e traducono tutte le istruzzioni del linguaggio p (meno il optitem)
+#+begin_src java
+private void stat(int labelAttuale){
+    switch (look.tag) {
+        // il caso di ogni stat.
+        default:
+            error("not valid stat");
+    }
+}
+#+end_src
+
+*** assign
+#+begin_src java
+case Tag.ASSIGN:
+match(Tag.ASSIGN);
+expr();
+match(Tag.TO);
+idlist(Tag.ASSIGN);
+break;
+#+end_src
+
+*** print
+#+begin_src java
+case Tag.PRINT:
+match(Tag.PRINT);
+match('[');
+exprlist(Tag.PRINT);
+match(']');
+break;
+#+end_src
+
+*** read
+#+begin_src java
+case Tag.READ:
+match(Tag.READ);
+match('[');
+idlist(Tag.READ);
+match(']');
+break;
+#+end_src
+
+*** while
+#+begin_src java
+case Tag.WHILE:
+match(Tag.WHILE);
+int endwhile   = code.newLabel();
+match('(');
+bexpr(endwhile);
+match(')');
+stat(labelAttuale);
+code.emit(OpCode.GOto,labelAttuale);
+code.emitLabel(endwhile);
+break;
+#+end_src
+
+*** conditional
+#+begin_src java
+case Tag.COND:
+int lendCondition = code.newLabel();
+match(Tag.COND);
+match('[');
+optlist(lendCondition);
+match(']');
+switch (look.tag) {
+    case Tag.ELSE:
+    match(Tag.ELSE);
+    stat(labelAttuale);
+    case Tag.END:
+    match(Tag.END);
+    code.emitLabel(lendCondition);
+    break;
+    default:
+    error("not valid command");
+}
+break;
+#+end_src
+
+*** stat {statlist}
+#+begin_src java
+case '{':
+match('{');
+statlist(labelAttuale);
+match('}');
+break;
+#+end_src
