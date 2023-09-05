@@ -1,4 +1,4 @@
-* MInimizzazione
+* Minimizzazione
 
 minimizzare il seguente DFA
 
@@ -51,10 +51,227 @@ in cui la prima _a_, se presente, è precedutta da un numero dispari di b.
 
 Data l'espressione regolare E = (bcb +c*)* sull'alfabeto {a,b,c}, determinare quale delle
 seguenti stringhe appartiene al linguaggio generato da E.
-*** cbc
-*** bc
-*** TODO cbcbc
-*** bcbcb
+*** [ ] cbc
+*** [ ] bc
+*** [ ] cbcbc
+*** [ ] bcbcb
 
-** altro
-(as)(a+c+sc)*(sa)
+** Minimizzare il seguente DFA. Mostrare la _tabella di transizione completa_ del DFA minmo i cui stati sono le classi di equivalenza risultanti dalla minimizzazione, anhe nel caso in cui il DFA sia già minimo.
+|-----+---+---|
+|     | 0 | 1 |
+|-----+---+---|
+|   0 | 0 | 0 |
+| * 1 | 3 | 2 |
+|   2 | 1 | 2 |
+|   3 | 2 | 0 |
+| → 4 | 3 | 2 |
+|-----+---+---|
+*** Risposta
+* epsilon chiusura
+** Detta α la funzione di transizione dell'automa seguente
+
+|------+------+------+---------|
+|      | 0    | 1    | ϵ        |
+|------+------+------+---------|
+| → q0 | ø    | ø    | {q1,q5} |
+| q1   | {q2} | ø    | ø       |
+| q2   | ø    | ø    | {q3}    |
+| q3   | ø    | {q4} | ø       |
+| q4   | ø    | ø    | {q1,q5} |
+| *q5  | ø    | ø    | ø       |
+|------+------+------+---------|
+
+quale dei seguenti insiemi corrisponde a δ(q1,01)?
+
+- [ ] {q1,q2,q5}
+- [ ] {q1,q4,q5}
+- [ ] {q1,q3,q5}
+- [ ] {q1,q4,q5}
+
+*** risposta
+q1 →(0) q2 →(ϵ) q3 →(1) q4
+
+allora δ(q1,01) contiene q4 e il ϵ di q4
+
+- [X] {q1,q2,q5}
+- [X] {q1,q4,q5}
+- [X] {q1,q3,q5}
+- [✓] {q1,q4,q5}
+
+* Espessioni regolari
+** Data l'espressione regolare E=((10)*+1*)* sull alfabeto {0,1,2}, determinare quale delle seguenti string appartiene al linguaggio generato da E.
+- [ ] 11000
+- [ ] 10110
+- [ ] 10010
+- [ ] 00
+*** risposta
+questo caso posso scartare tra questi. considerando che per forza deve avere un
+_1_ prima di un _0_, possiamo scartare tutti quelli che hanno piu da un 0 ripetuto.
+lasciando all'opzione *10110* come unica valida
+- [X] 11000
+- [✓] 10110
+- [X] 10010
+- [X] 00
+
+* pumping lemma
+** Si suponga di voler dimostrare il pumping lemma per il linguaggio regolare L riconosciuto dal seguente DFA con 5 stati
+|-----+---+---|
+|     | b | c |
+|-----+---+---|
+|   0 | 0 | 0 |
+|  *1 | 2 | 0 |
+|   2 | 1 | 3 |
+|   3 | 2 | 0 |
+| → 4 | 1 | 3 |
+|-----+---+---|
+Si consideri ora la stringa _w = cbcbb_ ∈ L di lunghezza 5. Per concludere la
+dimostrazione vista a lezione viene scelta una partciolrae scomposizione *xyz* di w.
+Quale?
+- [ ] x = c, y = bcb, z = b
+- [ ] x = c, y = b, z = bcb
+- [ ] x = c, y = bc, z = bb
+- [ ] x = cb, y = c, z = bb
+
+*** Risposta
+qua *y* sarebbe la parte che gira tra i diversi stati evitando la linealità del processo del automa.
+
+Quindi con la stringa w l'automa farebe:
+4 →(c) 3 →(b) 2 →(c) 3 →(b) 2 →(b) 1
+
+allora la parte 3 →(b) 2 →(c) 3 sarebbe la parte della stringa che gira atraverso
+gli stati di maniera no lineare, quindi il nostro y. quindi sarebe
+x → c
+y → bc
+z → bb
+
+- [X] x = c, y = bcb, z = b
+- [X] x = c, y = b, z = bcb
+- [✓] x = c, y = bc, z = bb
+- [X] x = cb, y = c, z = bb
+* Grammatiche
+** Data la gramatica G avente simbolo iniziale B
+B → D | BaD
+D → E | ϵ
+E → d
+individuare quale tra le seguenti è una stringa generata da G.
+- [ ] dda
+- [ ] aad
+- [ ] add
+*** Risposta
+B → Bad → BaDaD → DaDaD → ϵaϵad → aad
+- [X] dda
+- [✓] aad
+- [X] add
+* Derivazioni
+** data la grammatica G. Individuare quale tra le seguenti è una derivazione canonica *destra* di G.
+A → EcC
+C → ϵ | A
+D → AbA
+E → c
+- [ ] D → AbA → EcCbA → ccCbA → ccCbEcC
+- [ ] D → AbA → EcCbA → EcAbA → EcEcCbA
+- [ ] D → AbA → AbEcC → AbEc → Abcc
+- [ ] D → AbA → EcCbA → EcCbEcC → EcCbEcA
+
+*** Risposta
+- [X] D → AbA → EcCbA → ccCbA → ccCbEcC
+- [X] D → AbA → EcCbA → EcAbA → EcEcCbA
+- [✓] D → AbA → AbEcC → AbEc → Abcc
+- [X] D → AbA → EcCbA → EcCbEcC → EcCbEcA
+* automi a pila
+** Sia P = ({q},{a,c},{a,c,B,D,E},δ,q,E,{q}) un automa a pila che esegue la mossa
+                           (q,a,EBB) ⊢ₚ (q,a,BDaBBB)
+Quale delle seguenti relazioni giustifica questa mossa?
+*** Risposta
+|--------------+---+------------|
+| (q,a,BDaBBB) | → | (q,a,EBBB) |
+| *TOGLI*        |   | *AGGIUNGI*   |
+| (q,BDa)      | ∈ | (q,ϵ,E)     |
+|--------------+---+------------|
+quindi la risposta giusta sarebbe (q,BDa) ∈ (q,ϵ,E)
+* Grammatiche LL(1)
+** Le seguenti produzioni appartengono a una grammatica G avente simbolo iniziale B
+
+                               A → Ecc | caE | cb
+
+Quale tra le seguenti relazioni è _sicuramente_ vera senza conoscere l'intera grammatica
+- [ ] FOLLOW(A) ⊂ FOLLOW(E)
+- [ ] c ∈ FOLLOW(A)
+- [ ] FOLLOW(B) ⊂ FOLLOW(A)
+*** Risposta
+
+Argomentando un po ogni possibile risposta:
+
+- FOLLOW(A) ⊆ FOLLOW(E) :: Possiamo confermarlo perche effetivamente il FOLLOW(E) appartiene a FOLLOW(A) perche E viene subito dopo la A nel caso _Ecc_.
+
+- c ∈ FOLLOW(A) :: Non puo essere giusto perche c viene dopo E, che apartiene a FOLLOW(A), quindi c ∈ FOLLOW(E).
+
+- FOLLOW(B) ⊆ FOLLOW(A) :: direttamente B non si trova nella produzione vista.
+
+- [✓] FOLLOW(A) ⊂ FOLLOW(E)
+- [X] c ∈ FOLLOW(A)
+- [X] FOLLOW(B) ⊂ FOLLOW(A)
+
+* Attributi
+** Le seguente produzione con asscoate _regole semantiche_ in cui gli Sᵢ (se presenti) sonon attributi _sintetizzati_ e gli eᵢ (se presenti) sono attributi _ereditati_, appartiene a una SDD
+
+                   A → BCD {A.s₀=D.s₂, A.s₁=D.s₂, A.s₂=D.s₀}
+
+- [ ] che puo essere L-attribuita ma non S-attribuita
+- [ ] che puo essere S-attribuita
+- [ ] che non è L-attribuita
+*** Risposta
+- S-attribuita :: SSD con solo attributi sintetizzati.
+
+- L-attribuita :: SSD dove tutti gli attributi deivano dalla A o dalla sinistra.
+
+- attribuita mista :: SSD con solo attributi sintetizzati(non eredati) che deivano dalla A.
+
+- [X] che puo essere L-attribuita ma non S-attribuita
+- [✓] che puo essere S-attribuita.
+- [X] che non è L-attribuita
+
+* analisi statica
+** Determinare il massimo di operandi contemporaneamente presenti sulla piladurante la valutazione della seguente espressione
+(z / 8 + 8) * x
+*** Risposta
+**** Z / 8: 2
+|   |
+|---|
+| 8 |
+|---|
+| z |
+|---|
+
+|     |
+|-----|
+|     |
+|-----|
+| z/8 |
+|-----|
+
+**** z/8 + 8: 2
+|     |
+|-----|
+|  8  |
+|-----|
+| z/8 |
+|-----|
+
+**** (z/8 + 8) * x: 2
+|       |
+|-------|
+| x     |
+|-------|
+| z/8+8 |
+|-------|
+
+|           |
+|-----------|
+|           |
+|-----------|
+| (z/8+8)*x |
+|-----------|
+
+**** conclusione
+nessun punto dell'espressione opera con piu di *2* operandi.
