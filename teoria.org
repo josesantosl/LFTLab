@@ -3,9 +3,9 @@
   una stringa è annullabili quando le sue trasformazioni diventano \epsilon.
   nel caso:
    
-  A \to a|Bc
-  B \to \epsilon|bB
-  C \to d|Cc|BB
+  A → a|Bc
+  B → ϵ|bB
+  C → d|Cc|BB
 
   facciamo l'esercizio 
   NULL(A)? _NO_
@@ -13,7 +13,7 @@
   NULL(Bc)? _NO_
   
    NULL(B)? _SI_
-   NULL(\epsilon)?  _SI_
+   NULL(ϵ)?  _SI_
    NULL(bB)? _NO_
 
    NULL(C)? _SI_
@@ -21,29 +21,29 @@
    NULL(Cc)? _NO_
    NULL(BB)? _SI_
 
-* FIRST(\alpha)
-  FIRST(\alpha) indica gli _inizi_ di \alpha ovvero l'insieme dei simboli 
-  terminali che possono trovarsi all'_inizio_ delle stringhe dirvate da \alpha.
+* FIRST(α)
+  FIRST(ϵ) indica gli _inizi_ di α ovvero l'insieme dei simboli
+  terminali che possono trovarsi all'_inizio_ delle stringhe dirvate da α.
 ** Come calcolare FIRST
-   È possibile calcolare _FIRST(\alpha)_ per induzie su \alpha:
+   È possibile calcolare _FIRST(α)_ per induzie su \alpha:
 
-   FIRST(\epsilon) = \empty
+   FIRST(ϵ) = ø
    FIRST(a) = {a}
-   FIRST(A) = \cup_{A \to \alpha} FIRST(\alpha)
+   FIRST(A) = ∪_{A → α} FIRST(α)
 
-   FIRST(X\alpha)= FIRST(X) \cup FIRST(\alpha), se NULL(X)
+   FIRST(Xα)= FIRST(X) ∪ FIRST(α), se NULL(X)
             = FIRST(X)           , altrimenti
 	       
 ** Esempio del calcolo di FIRST
-   S \to Ac|Ba
-   A \to \epsilon|a
-   B \to b
-   C \to a|Cb
-   D \to \epsilon|d|Db
+   S → Ac|Ba
+   A → ϵ|a
+   B →b
+   C →a|Cb
+   D →ϵ|d|Db
     
-   sapendo che FIRST(S) = FIRST(Ac)\cup FIRST(Ba) = FIRST(A) \cup FIRST(c) \cup FIRST(B)
+   sapendo che FIRST(S) = FIRST(Ac)∪ FIRST(Ba) = FIRST(A) ∪ FIRST(c) ∪ FIRST(B)
     
-   FIRST(A)= FIRST(\epsilon) \cup FIRST(a) = \empty \cup {a}
+   FIRST(A)= FIRST(ϵ) ∪ FIRST(a) = \empty ∪ {a}
    FIRST(B)= FIRST(b) = {b}
    FIRST(C)= FIRST(a) \cup FIRST(Cb) = {a} \cup FIRST(C) = {a}
    FIRST(D)= FIRST(\epsilon) \cup FIRST(d) \cup FIRST(Db) = {d} \cup FIRST(D) \cup FIRST(b) = {b,d}
@@ -63,10 +63,10 @@
 **** Fase 1
      In questa fase si annotano realiazioni di appartenenza ed inclusione insiemistica 
      secondo il seguente algoritmo
-       1. Se A \to \alpha B\beta, allora annotare FIRST(\beta)\sub FOLLOW(B).
-       2. Se A \to \alpha B\beta e NULL(\beta), allora annotare FOLLOW(A) \sub FOLLOW(B)
+       1. Se A → α Bβ, allora annotare FIRST(β)⊂FOLLOW(B).
+       2. Se A → α Bβ, e NULL(β), allora annotare FOLLOW(A) ⊂ FOLLOW(B)
 
-     _Caso particolare_: se A \to \alpha B, allora annotare FOLLOW(A)\sub FOLLOW(B)
+     _Caso particolare_: se A → α B, allora annotare FOLLOW(A) ⊂ FOLLOW(B)
 **** Fase 2
      Si determinanno i seguiti propagando i simboli terminali(e $) rispettando l'ordine
      delle inclusioni insiemistiche \sub che sono state annotate.
@@ -77,11 +77,11 @@
 ** Esempio di calcolo di FOLLOW
    usando l'esempio vecchio 
 
-   S \to Ac|Ba
-   A \to \epsilon | a
-   B \to b
-   C \to a |Cb
-   D \to \epsilon |d|Db
+   S →  Ac|Ba
+   A →  ϵ | a
+   B →  b
+   C →  a | Cb
+   D →  ϵ|d|Db
    
    e ricordando i suoi FIRST
 
@@ -89,45 +89,55 @@
 |   | NULL | FIRST |
 |---+------+-------|
 | S |      | a,b,c |
-| A | \check    | a     |
+| A | ✓    | a     |
 | B |      | b     |
 | C |      | a     |
-| D | \check    | b,d   |
+| D | ✓    | b,d   |
 |---+------+-------|
 
-   $ \in FOLLOW(S)
-   FIRST(c) \sub FOLLOW(A)
-   FIRST(a) \sub FOLLOW(B)
-   FIRST(b) \sub FOLLOW(C)
-   FIRST(b) \sub FOLLOW(D)
-   \nbsp 
-   
+   $ ∈ FOLLOW(S)
+   FIRST(c) ⊂ FOLLOW(A)
+   FIRST(a) ⊂ FOLLOW(B)
+   FIRST(b) ⊂ FOLLOW(C)
+   FIRST(b) ⊂ FOLLOW(D)
+
    quindi
 
 |---+------+-------+--------|
 | X | NULL | FIRST | FOLLOW |
 |---+------+-------+--------|
 | S |      | a,b,c | $      |
-| A | \check    | a     | c      |
+| A | ✓    | a     | c      |
 | B |      | b     | a      |
 | C |      | a     | b      |
-| D | \check    | b,d   | b      |
+| D | ✓    | b,d   | b      |
 |---+------+-------+--------|
 
-* Insieme GUIDA(A\to\alpha)
+* Insieme GUIDA(A→α)
   è un insieme di simboli terminali che posso aspettare di vedere in stringhe che 
   derivano di A.
-  GUIDA(A\to\alpha) = FIRST(\alpha) \cup FIRST(A), se NULL(\alpha)
-             = FIRST(\alpha)           , altrimenti
-	 
+  GUIDA(A → α) = FIRST(α) ∪ FIRST(A), se NULL(α)
+               = FIRST(α)           , altrimenti
+
+quindi  usando le tabelle di prima
+
+|---+------+-------+--------+-------|
+| X | NULL | FIRST | FOLLOW | GUIDA |
+|---+------+-------+--------+-------|
+| S |      | a,b,c | $      |       |
+| A | ✓    | a     | c      |       |
+| B |      | b     | a      |       |
+| C |      | a     | b      |       |
+| D | ✓    | b,d   | b      |       |
+|---+------+-------+--------+-------|
 * Grammatiche LL(1)
   diciamo che una grammatcia G=(VTPS) è LL(1) se per ogni coppia di produzioni 
-  distente A\to\alpha e A\to\beta in P, abbiamo che 
-           GUIDA(A\to\alpha) \cap GUIDA(A\to\beta) = \empty
+  distente A\to\alpha e A→α in P, abbiamo che
+           GUIDA(A→α) ∩ GUIDA(A→β) = ø
 
-  - L \to La stringa in input viene analizzata _da sinistra(LEFT) a destra_
-  - L \to Il parser cerca di costruire una _direvazione canonica sinistra_ (leftmost)
-  - 1 \to Il parser usa _un solo simbolo terminale_ della stringa per scegliere la produzione.
+  - L → La stringa in input viene analizzata _da sinistra(LEFT) a destra_
+  - L → Il parser cerca di costruire una _direvazione canonica sinistra_ (leftmost)
+  - 1 → Il parser usa _un solo simbolo terminale_ della stringa per scegliere la produzione.
 
 * 5.1 Definizioni dirette dalla sintassi (SDD)
   
@@ -147,14 +157,14 @@
 |------------+-------------------+----|
 | produzioni | Regole semantiche | n° |
 |------------+-------------------+----|
-| E \to E_1 + T | E.v = E_1 .v + T.v |  1 |
-| E \to T      | E.v = T.v         |  2 |
-| T \to T_1 * F | T.v = T_1 .v X F.v |  3 |
-| T \to F      | T.v = F.v         |  4 |
-| F \to (E)    | F.v = E.v         |  5 |
-| F \to n      | F.v = n.v         |  6 |
+| E → E₁ + T  | E.v = E₁ .v + T.v  |  1 |
+| E → T      | E.v = T.v         |  2 |
+| T → T₁ * F  | T.v = T₁ .v X F.v  |  3 |
+| T → F      | T.v = F.v         |  4 |
+| F → (E)    | F.v = E.v         |  5 |
+| F → n      | F.v = n.v         |  6 |
 |------------+-------------------+----|
-   
+
 ** Albero sintattico annotato
    Un albero sintattico annotato è un albero sintattico in cui ogni nodo puo essere annotato
    con zero o più _attributi_.
@@ -169,7 +179,7 @@
 
 **** Esempio
      avendo un nodo A con l'argomento sintattico S, e con _n_ figli.
-     A \to X_1, X_2 ... X_n    A.s = F(X_1 .a_1, X_2. a_2, X_n. a_n)
+     A → X₁, X₂ ... Xₙ    A.s = F(X₁ .a₁, X₂. a₂, Xₙ. aₙ)
 
 *** Attributi ereditato
     si dice ereditato  se il valore del attributo dipende da quello di attributi 
@@ -186,12 +196,12 @@
 ** Esempi
 
 |------------+----------------------+----------------------------------------------------------------------------------------------------------------|
-| *produzione* | *produzione + Azioni*  | *Desscrizione*                                                                                                   |
+| produzione | produzione + Azioni  | Desscrizione                                                                                                   |
 |------------+----------------------+----------------------------------------------------------------------------------------------------------------|
-| A \to BC     | A \to BC{code}         | code eseguito dopo il riconoscimento di B e C.                                                                 |
-| A \to BC     | A \to B{code}C         | code eseguito dopo il riconosciemnto di B ma prima del riconoscimento di C.                                    |
-| A \to BC     | A \to {code1}BC{code2} | code 1 eseguito subito dopo la riscrittura di A e prima del riconoscimento di B. code 2 dopo il riconoscere C. |
-| A \to \epsilon      | A \to {code}           | code eseguito subito dopo la riscrittura di A.                                                                 |
+| A → BC     | A → BC{code}         | code eseguito dopo il riconoscimento di B e C.                                                                 |
+| A → BC     | A → B{code}C         | code eseguito dopo il riconosciemnto di B ma prima del riconoscimento di C.                                    |
+| A → BC     | A → {code1}BC{code2} | code 1 eseguito subito dopo la riscrittura di A e prima del riconoscimento di B. code 2 dopo il riconoscere C. |
+| A → ϵ       | A → {code}           | code eseguito subito dopo la riscrittura di A.                                                                 |
 |------------+----------------------+----------------------------------------------------------------------------------------------------------------|
 
 ** Differenze tra regole e azioni semantiche
@@ -214,11 +224,11 @@
 
 ** Algoritmo
    Data una SDD L-attribuita, si può ottenere una SDT corrispondente nel modo seguente. 
-   Per ogni produzione A \to X_1, X_2... X_n  della grammatica:
+   Per ogni produzione A → X₁, X₂... Xₙ della grammatica:
 
-   Subito prima di X_i, aggiungere un’azione semantica che calcola il valore degli 
+   Subito prima di Xᵢ, aggiungere un’azione semantica che calcola il valore degli
    attributi ereditati di . Nota: in una SDD L-attribuita, questi attributi possono 
-   dipendere solo da attributi ereditati di *A* ed attributi di X_1, … ,X_{i-1}.
+   dipendere solo da attributi ereditati di *A* ed attributi di X₁, … ,X_{i-1}.
 
    In fondo alla produzione, aggiungere un’azione semantica che calcola il valore 
    degli attributi sintetizzati di *A*.
@@ -329,7 +339,7 @@ nome della variabile _x_ nel frame del metodo corrente
 | ior        | v1 v2 | v    | disgiunzione bit a bit      |
 |------------+-------+------+-----------------------------|
 
-sempre il v_2 sara il valore alla cima della pilla.
+sempre il v₂ sara il valore alla cima della pilla.
 
 ** Gestione degli array
 
@@ -351,9 +361,9 @@ _a_ è un riferimento all'array nell'heap.
 |----------------+---------+------+---------------------------------|
 | goto l         |         |      | salta a l                       |
 | if_ icmpeq l   | v1 v2   |      | salta a l se v1 = v2            |
-| if_ icmpne l   | v1 v2   |      | salta a l se v1 \neq v2            |
-| if_ icmple l   | v1 v2   |      | salta a l se v1 \le v2            |
-| if_ icmpge l   | v1 v2   |      | salta a l se v1 \geq v2            |
+| if_ icmpne l   | v1 v2   |      | salta a l se v1 ≠ v2            |
+| if_ icmple l   | v1 v2   |      | salta a l se v1 ≤ v2            |
+| if_ icmpge l   | v1 v2   |      | salta a l se v1 ≥ v2            |
 | if_ icmplt l   | v1 v2   |      | salta a l se v1 < v2            |
 | if_ icmpgt l   | v1 v2   |      | salta a l se v1 > v2            |
 | invokestatic m | v1...vn | v?   | invoca m(v1,...,vn)             |
@@ -365,9 +375,9 @@ _a_ è un riferimento all'array nell'heap.
   Definiamo SDD e SDT per la traduzione di espressioni aritmetiche.
 ** Grammatica delle espressioni aritmetiche
 
-|-------------+------------------------------|
-| produzioni  | descrizione                  |
-|-------------+------------------------------|
+|---------------+------------------------------|
+| produzioni    | descrizione                  |
+|---------------+------------------------------|
 | E \to E1 + E2 | somma                        |
 | E \to E1 - E2 | Sottrazione                  |
 | E \to E1 * E2 | moltiplicazione              |
@@ -376,18 +386,18 @@ _a_ è un riferimento all'array nell'heap.
 | E \to (E1)    | stesso valores di E1         |
 | E \to n       | costante                     |
 | E \to x       | variabile                    |
-|-------------+------------------------------|
+|---------------+------------------------------|
 
 ** SDD per espresioni aritmetiche
    
-|-------------+-----------------------------------|
-| produzioni  | regole semantiche                 |
-|-------------+-----------------------------------|
-| E \to n       | E.code = ldc n.v                  |
-| E \to x       | E.code = iload &x                 |
-| E \to E1 + E2 | E.code = E1.code / E2.code / iadd |
-| E \to (E1)    | E.code = E1.code                  |
-|-------------+-----------------------------------|
+|---------------+-----------------------------------|
+| produzioni    | regole semantiche                 |
+|---------------+-----------------------------------|
+| E → n         | E.code = ldc n.v                  |
+| E → x         | E.code = iload &x                 |
+| E → E1 + E2   | E.code = E1.code / E2.code / iadd |
+| E → (E1)      | E.code = E1.code                  |
+|---------------+-----------------------------------|
 
 E.code = codice che calcola il valore di E e lo lascia
 in cima alla pila.
@@ -395,32 +405,32 @@ in cima alla pila.
 ** SDT per la grammatica ambigua 
 *** SDT con accumulo del codice
 
-|-------------+-------------------------------------|
-| produzioni  | Azioni semantiche                   |
-|-------------+-------------------------------------|
-| E \to E1 + E2 | {E.code= E1.code / E2.code / iadd}  |
-| E \to E1 - E2 | {E.code=  E1.code / E2.code / isub} |
-| E \to E1 * E2 | {E.code= E1.code / E2.code / imul}  |
-| E \to E1 / E2 | {E.code= E1.code / E2.code / idiv}  |
-| E \to E1 % E2 | {E.code= E1.code / E2.code / irem}  |
-| E \to (E1)    | {E.code= E1.code}                   |
-| E \to n       | {E.code= ldc n.v}                   |
-| E \to x       | {e.code= iload &x}                  |
-|-------------+-------------------------------------|
+|-------------+--------------------------------------|
+| produzioni  | Azioni semantiche                    |
+|-------------+--------------------------------------|
+| E → E1 + E2 | {E.code = E1.code / E2.code / iadd}  |
+| E → E1 - E2 | {E.code =  E1.code / E2.code / isub} |
+| E → E1 * E2 | {E.code = E1.code / E2.code / imul}  |
+| E → E1 / E2 | {E.code = E1.code / E2.code / idiv}  |
+| E → E1 % E2 | {E.code = E1.code / E2.code / irem}  |
+| E → (E1)    | {E.code = E1.code}                   |
+| E → n       | {E.code = ldc n.v}                   |
+| E → x       | {e.code = iload &x}                  |
+|-------------+--------------------------------------|
 
 *** SDT "on the fly"
 
 |-------------+-------------------|
 | produzioni  | Azioni semantiche |
 |-------------+-------------------|
-| E \to E1 + E2 | {emit(iadd)}      |
-| E \to E1 - E2 | {emit(isub)}      |
-| E \to E1 * E2 | {emit(imul)}      |
-| E \to E1 / E2 | {emit(idiv)}      |
-| E \to E1 % E2 | {emit(irem)}      |
-| E \to (E1)    |                   |
-| E \to n       | {emit(ldc n.v)}   |
-| E \to x       | {emit(iload &x)}  |
+| E → E1 + E2 | {emit(iadd)}      |
+| E → E1 - E2 | {emit(isub)}      |
+| E → E1 * E2 | {emit(imul)}      |
+| E → E1 / E2 | {emit(idiv)}      |
+| E → E1 % E2 | {emit(irem)}      |
+| E → (E1)    |                   |
+| E → n       | {emit(ldc n.v)}   |
+| E → x       | {emit(iload &x)}  |
 |-------------+-------------------|
 
 * 5.5 Traduzione di espresioni logiche
@@ -430,24 +440,24 @@ in cima alla pila.
 |--------------+---------------------|
 | Produzioni   | Descrizione         |
 |--------------+---------------------|
-| B \to true     | Sempre vero         |
-| B \to false    | Sempre false        |
-| B \to E1 R E2  | Confronto           |
-| B \to B1 && B2 | congiunzione logica |
-| B \to B1 \\ B2 | disgiunzione logica |
-| B \to !B1      | negazione logica    |
-| B \to (B1)     | Stesso valore di B1 |
+| B → true     | Sempre vero         |
+| B → false    | Sempre false        |
+| B → E1 R E2  | Confronto           |
+| B → B1 && B2 | congiunzione logica |
+| B → B1 \\ B2 | disgiunzione logica |
+| B → !B1      | negazione logica    |
+| B → (B1)     | Stesso valore di B1 |
 |--------------+---------------------|
 
 |------------+-----------------|
 | Produzioni | Descrizione     |
 |------------+-----------------|
-| R \to ==     | Uguale          |
-| R \to !=     | Diverso         |
-| R \to <      | minore          |
-| R \to >      | maggiore        |
-| R \to \leq      | minore o uguale |
-| R \to \geq      | maggiore o ugu  |
+| R \to ==   | Uguale          |
+| R \to !=   | Diverso         |
+| R \to <    | minore          |
+| R \to >    | maggiore        |
+| R \to ≤    | minore o uguale |
+| R \to ≥    | maggiore o ugu  |
 |------------+-----------------|
 
 *** Attributi
@@ -471,32 +481,32 @@ in cima alla pila.
 |--------------+------------------------------------|
 | produzioni   | Regole Semantiche                  |
 |--------------+------------------------------------|
-| B \to B1 && B2 | B1.true = newlabel()               |
+| B → B1 && B2 | B1.true = newlabel()               |
 |              | B1.false= B.false                  |
 |              | B2.true = B.true                   |
 |              | B2.false= B.false                  |
 |              | B.code= B1.code \ B1.true: B2.code |
-| B \to !B1      | B1.true = B.false                  |
+| B → !B1      | B1.true = B.false                  |
 |              | B1.false= B.true                   |
 |              | B.code = B1.code                   |
 |--------------+------------------------------------|
 
 ** Esempi 
 *** Codice per x < y
-#+BEGIN_SRC
-iload &x
-iload &y
+#+BEGIN_SRC C
+iload &x;
+iload &y;
 if_complt B.true
 goto B.false
 #+END_SRC
 *** codice per 0 <=x && x<5
-#+BEGIN_SRC
-   ldc 0
-   iload &x
-   if_icmple L1
-   goto B.false
-L1:iload &x
-   ldc 5
+#+BEGIN_SRC C
+   ldc 0;
+   iload &x;
+   if_icmple L1;
+   goto B.false;
+L1:iload &x;
+   ldc 5;
    if_icmplt B.true
    goto B.false
 #+END_SRC
