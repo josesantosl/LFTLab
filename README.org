@@ -214,24 +214,56 @@ public void emitLabel(int operand) {
 -             → / <expr> <expr>
 -  <[[exprlist]]> → <expr> <exprlistp>
 - <[[exprlistp]]> → , <expr> <exprlistp> | ϵ
+
 ** prog
+Il programma inizia confermando che il file non sia vuoto.
 #+begin_src java
-    private void prog(){//prog() -> statlist(lnext) EOF
-		if (look.tag == Tag.EOF) {
-			error("file vuoto");
-		}
-
-		int proglabel = code.newLabel();
-		statlist(proglabel);
-		match(Tag.EOF);
-
-		code.emit(OpCode.GOto,proglabel);
-		code.emitLabel(proglabel);
-
-        try {
-			code.toJasmin();
-        }catch(java.io.IOException e) {
-			System.err.println("Error writting the Output.j");
-		}
-    }
+private void prog(){//prog() -> statlist(lnext) EOF
+	if (look.tag == Tag.EOF) {//se il primo token e' un EOF. EOF: End Of File
+		error("file vuoto");// allora manda un'errore
+	}
 #+end_src
+
+Si genera il primo label del programa che sarebbe L0, e esegue il statlist e conferma che il file è finito
+#+begin_src java
+	int proglabel = code.newLabel();
+	statlist(proglabel);
+	match(Tag.EOF);
+#+end_src
+
+e finalmente si aggiunge il L0
+#+begin_src java
+	code.emit(OpCode.GOto,proglabel);
+	code.emitLabel(proglabel);
+#+end_src
+
+Dopo aver finito di scrivere le struzioni procede a usare il comando _code.toJasmin()_
+che scrive tutte le struzioni nel Output.j
+#+begin_src java
+    try {
+		code.toJasmin();//scrive istruzioni in Output.j
+    }catch(java.io.IOException e) {
+		System.err.println("Error writting the Output.j");//envia errore
+    }
+}
+#+end_src
+
+** statlist
+Lo statlist esegue il primo statement e genera il label per il seguente stat e lo indiriza verso la con un GoTo.
+#+begin_src java
+private void statlist(int labelAttuale){
+	stat(labelAttuale);//esegue stat
+	int lnext = code.newLabel();//genera un nuovo label per il seguente stat.
+	code.emit(OpCode.GOto,lnext);//salta al nuovo label.
+    code.emitLabel(lnext);//scrive il label tra le istruzioni
+	statlistp(lnext);//continua la lista di stat.
+}
+
+#+end_src
+    private void statlist(int labelAttuale){
+		stat(labelAttuale);
+		int lnext = code.newLabel();
+		code.emit(OpCode.GOto,lnext);
+		code.emitLabel(lnext);
+		statlistp(lnext);
+    }
