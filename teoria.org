@@ -505,7 +505,7 @@ goto B.false
    iload &x;
    if_icmple L1;
    goto B.false;
-L1:iload &x;
+   L1: iload &x;
    ldc 5;
    if_icmplt B.true
    goto B.false

@@ -31,7 +31,8 @@ minimizzare il seguente DFA
 -------
  |12345
 
-** altro
+** Definire un'espresione sull'alfabeto {a,b,c} che generi il linguaggio delle stringhe in cui la prima _a_, se presente, è precedutta da un numero dispari di b.
+                        (c*) (ϵ + (bb*)(b)(a)) (a+b+c)*
 
 |----+---+---|
 |    | 0 | 1 |
@@ -43,30 +44,41 @@ minimizzare il seguente DFA
 | *4 | 2 | 4 |
 |----+---+---|
 
-Definire un'espresione sull'alfabeto {a,b,c} che generi il linguaggio delle stringhe 
-in cui la prima _a_, se presente, è precedutta da un numero dispari di b.
-
-
-(c*) (\epsilon + (bb*)(b)(a)) (a+b+c)*
-
 Data l'espressione regolare E = (bcb +c*)* sull'alfabeto {a,b,c}, determinare quale delle
 seguenti stringhe appartiene al linguaggio generato da E.
+
 *** [ ] cbc
 *** [ ] bc
 *** [ ] cbcbc
 *** [ ] bcbcb
 
 ** Minimizzare il seguente DFA. Mostrare la _tabella di transizione completa_ del DFA minmo i cui stati sono le classi di equivalenza risultanti dalla minimizzazione, anhe nel caso in cui il DFA sia già minimo.
-|-----+---+---|
-|     | 0 | 1 |
-|-----+---+---|
-|   0 | 0 | 0 |
-| * 1 | 3 | 2 |
-|   2 | 1 | 2 |
-|   3 | 2 | 0 |
-| → 4 | 3 | 2 |
-|-----+---+---|
+|-------+---+---|
+|       | 0 | 1 |
+|-------+---+---|
+|     0 | 0 | 0 |
+|   * 1 | 3 | 2 |
+|     2 | 1 | 1 |
+|     3 | 2 | 0 |
+| → * 4 | 3 | 2 |
+|-------+---+---|
 *** Risposta
+facendo velocemente vediamo che tanto 1 come 4 hanno le stesse uscite
+|-------+---+---|
+|       | 0 | 1 |
+|-------+---+---|
+|   * 1 | 3 | 2 |
+| → * 4 | 3 | 2 |
+|-------+---+---|
+quindi si puo simplificare come
+|---------+-------+-------|
+|         |     0 |     1 |
+|---------+-------+-------|
+|       0 |     0 |     0 |
+| * {1,4} |     3 |     2 |
+|       2 | {1,4} | {1,4} |
+|       3 |     2 |     0 |
+|---------+-------+-------|
 * epsilon chiusura
 ** Detta α la funzione di transizione dell'automa seguente
 
