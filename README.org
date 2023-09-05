@@ -193,12 +193,12 @@ public void emitLabel(int operand) {
 -  <[[statlist]]> → <stat> <statlistp>
 - <[[statlistp]]> → ; <stat> <statlistp> |ϵ
 -      <[[stat]]> → [[assign]] <expr> to <idlist>
-              \t\t\t | [[print]] [ <exprlist> ]\\
-              \t\t\t | [[read]] [idlist]\\
-              \t\t\t | [[while]] ( <bexpr> ) <stat>\\
-              \t\t\t | [[conditional]] [ <optilist> ] end\\
-              \t\t\t | [[conditional]] [ <optilist> ] else <stat> end\\
-              \t\t\t | {<statlist>} |\\
+              \t | [[print]] [ <exprlist> ] \\
+              \t | [[read]] [idlist] \\
+              \t | [[while]] ( <bexpr> ) <stat> \\
+              \t | [[conditional]] [ <optilist> ] end \\
+              \t | [[conditional]] [ <optilist> ] else <stat> end \\
+              \t | {<statlist>} | \\
 -    <[[idlist]]> → ID <idlistp>
 -   <[[idlistp]]> → , ID <idlistp> |ϵ
 -  <[[optilist]]> → <optitem> <optilistp>
