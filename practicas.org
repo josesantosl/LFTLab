@@ -125,6 +125,9 @@ lasciando all'opzione *10110* come unica valida
 - [X] 10010
 - [X] 00
 
+** Definire un'espressione regolare sull'alfabeto {a,b,c} che generi il linguaggio delle stringhe in cui se non sono presenti a allora sono presenti b.
+*** Risposta
+((a+c)*(c*)(a+c)*) + ((b+c)*(c*)(b+c)*)
 * pumping lemma
 ** Si suponga di voler dimostrare il pumping lemma per il linguaggio regolare L riconosciuto dal seguente DFA con 5 stati
 |-----+---+---|
@@ -174,6 +177,9 @@ B → Bad → BaDaD → DaDaD → ϵaϵad → aad
 - [X] dda
 - [✓] aad
 - [X] add
+** Definire una CFG che generi il linguaggio {aᵐ(bc)ⁿ|0 ≤ m ≤ n}
+*** Risposta
+
 * Derivazioni
 ** data la grammatica G. Individuare quale tra le seguenti è una derivazione canonica *destra* di G.
 A → EcC
@@ -223,6 +229,30 @@ Argomentando un po ogni possibile risposta:
 - [✓] FOLLOW(A) ⊂ FOLLOW(E)
 - [X] c ∈ FOLLOW(A)
 - [X] FOLLOW(B) ⊂ FOLLOW(A)
+
+** Data la seguente grammatica il cui simbolo iniziale è D. mostrare FIRST e FOLLOW di tutte le variabili e gli insimi guida di tutte le produzioni. La grammatica è LL(1)?
+B → c|CBC
+C → ϵ|d
+D → E
+E → Bd
+*** Risposta
+|---+------+-------+--------|
+|   | NULL | FIRST | FOLLOW |
+|---+------+-------+--------|
+| B |      | {c,d} | {d}    |
+| C | ✓    | {d}   | {c,d}  |
+| D |      | {c,d} | {$}    |
+| E |      | {c,d} | {$}    |
+|---+------+-------+--------|
+
+|---------+-------|
+| INSIEMI | GUIDA |
+|---------+-------|
+| B → c   | {c}   |
+| B → CBC | {c,d} |
+| D → E   | {c,d} |
+| E → Bd  | {c,d} |
+|---------+-------|
 
 * Attributi
 ** Le seguente produzione con asscoate _regole semantiche_ in cui gli Sᵢ (se presenti) sonon attributi _sintetizzati_ e gli eᵢ (se presenti) sono attributi _ereditati_, appartiene a una SDD
@@ -287,3 +317,21 @@ Argomentando un po ogni possibile risposta:
 
 **** conclusione
 nessun punto dell'espressione opera con piu di *2* operandi.
+
+* traduzione inversa
+** Qual è il comando che viene tradotto nel codice seguente
+#+begin_src c
+L0:
+iload x;
+iload z;
+if icomplt L1
+goto STOP;
+L1:
+ldc 5;
+iload z;
+iadd;
+ldc 10;
+imul;
+istore x;
+goto L0;
+#+end_src
