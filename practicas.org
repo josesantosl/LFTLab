@@ -16,9 +16,10 @@
 - [ ] 221
 - [ ] 122
 *** Risposta
-  (2)  (2) \\
+#+begin_example
+  (2)  (2)
 q3 → q2 → q5
-
+#+end_example
 - [-] 22
 - [X] 12
 - [X] 221
