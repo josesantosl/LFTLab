@@ -20,7 +20,7 @@
   (2)  (2)
 q3 → q2 → q5
 #+end_example
-- [-] 22
+- [✓] 22
 - [X] 12
 - [X] 221
 - [X] 122
@@ -39,8 +39,15 @@ q3 → q2 → q5
 - [ ] dccdc
 - [ ] ddccc
 *** Risposta
-  (d)
-q2 → q
+#+BEGIN_EXAMPLE
+  (d)  (d)  (c)  (d)  (c)
+q2 → q4 → q4 → q3 → q4 → q3
+#+END_EXAMPLE
+
+- [✓] ddcdc
+- [X] ddcc
+- [X] dccdc
+- [X] ddccc
 * Minimizzazione
 
 minimizzare il seguente DFA
@@ -206,7 +213,39 @@ e il δ(q4) = {q3,q5}∪{q4} = {q3,q4,q5}
 - [X] {q0,q4,q5}
 - [X] {q1,q4,q5}
 
-* Espessioni regolari
+** Detta α la funzione di transizione dell'automa seguente
+
+|------+------+---------|
+|      | b    | ϵ        |
+|------+------+---------|
+| → q0 | ø    | {q1,q5} |
+| q1   | {q2} | ø       |
+| q2   | ø    | {q3}    |
+| q3   | {q4} | ø       |
+| q4   | ø    | {q1,q5} |
+| *q5  | ø    | ø       |
+|------+------+---------|
+
+quale dei seguenti insiemi corrisponde a δ(q4,bb)?
+
+- [ ] {q1,q4,q5}
+- [ ] {q1,q3,q5}
+- [ ] {q3,q4,q5}
+- [ ] {q0,q4,q5}
+
+*** Risposta
+#+begin_example
+  (ϵ)  (b)  (ϵ)  (b)
+q4 → q1 → q2 → q3 → q4
+#+end_example
+e il δ(q4) = {q1,q5}. quindi δ(q4,bb) = {q1,q4,q5}
+
+- [✓] {q1,q4,q5}
+- [X] {q1,q3,q5}
+- [X] {q3,q4,q5}
+- [X] {q0,q4,q5}
+
+* Espressioni regolari
 ** Data l'espressione regolare E=((10)*+1*)* sull alfabeto {0,1,2}, determinare quale delle seguenti string appartiene al linguaggio generato da E.
 - [ ] 11000
 - [ ] 10110
@@ -258,6 +297,19 @@ questo insieme ci permete stringhe che contengano la _c_ e un numero dispari di 
 Simplemente coincide con la _a_.
 **** (b*cb*bb*)*
 molto simile a la prima parte. permete continuare facendo combinazioni con b e c.
+** Data l'espressione regolare E = (bcb+c*)* sull'alfabeto {a,b,c}, determinare quale delle seguenti stringhe appartiene al linguaggio generato da E.
+
+- [ ] cbc
+- [ ] bc
+- [ ] cbcbc
+- [ ] bcbcb
+
+*** Risposta
+- [X] cbc
+- [X] bc
+- [✓] cbcbc
+- [X] bcbcb
+
 * pumping lemma
 ** Si suponga di voler dimostrare il pumping lemma per il linguaggio regolare L riconosciuto dal seguente DFA con 5 stati
 |-----+---+---|
@@ -312,19 +364,55 @@ Quale?
 - [ ] x = 2, y = 2, z = 1221
 
 *** Risposta
+#+begin_example
  (2) (2) (1) (2) (2) (1)
 3 → 2 → 2 → 1 → 2 → 2 → 1
+#+end_example
 
 quindi dal inizio si riconosce che il _2 → 2_ non affetta al percorso.
 
+#+begin_example
  (2)|  (2)  |(1) (2) (2) (1)
 3 → | 2 → 2 | → 1 → 2 → 2 → 1
+#+end_example
 
 - [X] x = 22, y = 1, z = 221
 - [X] x = 2, y = 21, z = 221
 - [X] x = 221, y = 2, z = 21
 - [✓] x = 2, y = 2, z = 1221
 
+** Si suponga di voler dimostrare il pumping lemma per il linguaggio regolare L riconosciuto dal seguente DFA con 5 stati
+|----+---+---+---|
+|    | a | b | c |
+|----+---+---+---|
+|  0 | 0 | 0 | 0 |
+| *1 | 0 | 0 | 0 |
+|  2 | 3 | 0 | 1 |
+|  3 | 0 | 2 | 0 |
+| →4 | 3 | 0 | 1 |
+|----+---+---+---|
+
+Si consideri ora la stringa _w = ababc_ ∈ L id lunghezza 5. Per concludere la
+dimostrazione vista a lezione viene scelta una partciolrae scomposizione *xyz* di w.
+Quale?
+
+- [ ] x = a, y = ba, z = bc
+- [ ] x = a, y = bab, z = c
+- [ ] x = ab, y = a, z = bc
+- [ ] x = a, y = b, z = abc
+
+*** Risposta
+#+begin_example
+ (a) |(b) (a) |(b) (c)
+4 → 3| → 2 → 3| → 2
+#+end_example
+
+la metta meno utile sarebe con y= ba
+
+- [✓] x = a, y = ba, z = bc
+- [X] x = a, y = bab, z = c
+- [X] x = ab, y = a, z = bc
+- [X] x = a, y = b, z = abc
 * Grammatiche
 ** Data la gramatica G avente simbolo iniziale B
 B → D | BaD
@@ -341,6 +429,12 @@ B → Bad → BaDaD → DaDaD → ϵaϵad → aad
 - [X] add
 ** Definire una CFG che generi il linguaggio {aᵐ(bc)ⁿ|0 ≤ m ≤ n}
 *** Risposta
+** Definire una CFG che generi il linguaggio {(ab)ⁱ(ba)ʲ|0 ≤ i ≤ j}
+*** Risposta
+A → ab | abAB
+B → ba
+**** test
+A → abAB → ababABB → abababBB → abababbaba
 ** Data la grammatica G avente simbolo iniziale E
 B → ϵ
 C → c | bC
@@ -359,12 +453,34 @@ E → EBC → EBbC → EBbc → Ebc → EBCbc → BCbc → Cbc → cbc
 - [X] bb
 - [X] bcb
 
+** Data la grammatica G avente simbolo iniziale B
+B → BCD| ϵ | c
+C → b
+D → ϵ | c
+
+individuare quale tra le seguenti è una stringa generata da G
+
+- [ ] ccc
+- [ ] bcc
+- [ ] cb
+
+*** Risposta
+X : B → BCD → cbc
+✓ : B → BCD cbϵ → cb
+
+- [X] ccc
+- [X] bcc
+- [✓] cb
+
 * Derivazioni
 ** data la grammatica G. Individuare quale tra le seguenti è una derivazione canonica _destra_ di G.
+
+#+begin_example
 A → EcC
 C → ϵ | A
 D → AbA
 E → c
+#+end_example
 - [ ] D → AbA → EcCbA → ccCbA → ccCbEcC
 - [ ] D → AbA → EcCbA → EcAbA → EcEcCbA
 - [ ] D → AbA → AbEcC → AbEc → Abcc
@@ -376,11 +492,13 @@ E → c
 - [✓] D → AbA → AbEcC → AbEc → Abcc
 - [X] D → AbA → EcCbA → EcCbEcC → EcCbEcA
 ** Data la grammatica G, Individuare quale tra le seguenti è una derivazione canonica _sinistra_ di G
-
+#+begin_example
 A → cb
 B → a | CE
 C → cAa
 E → adA
+#+end_example
+
 
 
 - [ ] B → CE → cAaE → ccbaE → ccbaadA
@@ -395,6 +513,24 @@ E → adA
 - [X] B → CE → CadA → Cadcb → cAaadcb
 - [X] B → CE → cAaE → cAaadA → cAaadcb
 
+** Data la grammatica G, Individuare quale tra le seguenti è una derivazione canonica _sinistra_ di G
+#+begin_example
+A → add | cE
+B → b
+E → B | AA
+#+end_example
+
+- [ ] E → AA → Aadd →cEadd → cBadd
+- [ ] E → AA → cEA →cAAA → caddAA
+- [ ] E → AA → Aadd →cEadd → cAAadd
+- [ ] E → AA → AcE →AcB → Acb
+
+*** Risposta
+
+- [X] E → AA → Aadd →cEadd → cBadd
+- [✓] E → AA → cEA →cAAA → caddAA
+- [X] E → AA → Aadd →cEadd → cAAadd
+- [X] E → AA → AcE →AcB → Acb
 * automi a pila
 ** Sia P = ({q},{a,c},{a,c,B,D,E},δ,q,E,{q}) un automa a pila che esegue la mossa
                            (q,a,EBB) ⊢ₚ (q,a,BDaBBB)
@@ -413,11 +549,11 @@ Quale delle seguenti relazioni giustifica questa mossa?
 *** Risposta
 ora si inverte(non sono sicuro perche)
 
+|-----------+---+-------------|
 | (q,dc,Ec) | → | (q,cdc,cEc) |
-|-----------+---+-------------|
 | togli     |   | aggiungi    |
-|-----------+---+-------------|
 | (q,ϵ)      |   | (q,c,c)     |
+|-----------+---+-------------|
 
 pratticamente non toglie niente e aggiunge una c in ogni parola
 
@@ -477,6 +613,70 @@ Quale tra le seguenti relazioni è *sicuramente* vera senza conoscere l'intera g
 - [ ] c ∈ FOLLOW(A)
 - [ ] a ∈ FOLLOW(A)
 
+** Data la seguente grammatica il cui simbolo iniziale è E. mostrare FIRST e FOLLOW di tutte le variabili e gli insimi guida di tutte le produzioni. La grammatica è LL(1)?
+                                  A → EB  | bbC
+                                  B → ϵ
+                                  C → c
+                                  E → dAd | ϵ
+*** Risposta
+iniziando da _E_
+**** NULL, FIRST & FOLLOW
+FIRST(Xα) = FIRST(X) ∪ FIRST(α), se NULL(X)
+          = FIRST(X)           , altrimenti
+FOLLOW(A)
+1. Se A → α Bβ, allora annotare FIRST(β)⊂FOLLOW(B).
+2. Se A → α Bβ, e NULL(β), allora annotare FOLLOW(A) ⊂ FOLLOW(B)
+3. se A → α B, allora annotare FOLLOW(A) ⊂ FOLLOW(B)
+
+|------------+------+-------+--------|
+| produzione | NULL | FIRST | FOLLOW |
+|------------+------+-------+--------|
+| A          | ✓    | {b,d} | {d}    |
+| B          | ✓    | ø     | {d}    |
+| C          |      | {c]   | {d}    |
+| E          | ✓    | {d}   | {$,d}  |
+|------------+------+-------+--------|
+
+***** A
+come tanto E come B sono anulabile,allora anche A è anulabile.
+
+FIRST(A)  = FIRST(E) ∪ FIRST(B) ∪ FIRST(b) = {b,d}
+FOLLOW(A) = FIRST(d) = d
+
+***** B
+B è NULL perche _B → ø_
+
+FIRST(B)  = ϵ → ø
+FOLLOW(B) = FOLLOW(A) = {d}
+
+***** C
+C è NULL perche _C → c_
+
+FIRST(C)  = c
+FOLLOW(C) = FOLLOW(A) = d
+
+***** E
+E è NULL perche _E → ø_
+
+FIRST(E)  = d
+FOLLOW(E) = $ ∪ FOLLOW(A) ={$,d}
+
+**** GUIDE
+
+GUIDA(A → α) = FIRST(α) ∪ FIRST(A), se NULL(α)
+             = FIRST(α)           , altrimenti
+
+|------------+---------------------------------+-------|
+| Produzione | logica                          | guida |
+|------------+---------------------------------+-------|
+| A → EB     | FIRST(E) ∪ FIRST(B) ∪ FOLLOW(A) | {d}   |
+| A → bbC    | FIRST(b)                        | {b}   |
+| B → ϵ       | FOLLOW(B)                       | {d}   |
+| C → c      | FIRST(c)                        | {c}   |
+| E → dAd    | FIRST(d)                        | {d}   |
+| E → ϵ       | FOLLOW(E)                       | {$,d} |
+|------------+---------------------------------+-------|
+
 * Attributi
 ** Le seguente produzione con asscoate _regole semantiche_ in cui gli Sᵢ (se presenti) sonon attributi _sintetizzati_ e gli eᵢ (se presenti) sono attributi _ereditati_, appartiene a una SDD
 
@@ -511,7 +711,6 @@ essere un L-attribuita.
 - [✓] che puo essere L-attribuita ma non S-attribuita
 - [X] che puo essere S-attribuita
 - [X] che non è L-attribuita
-
 
 * analisi statica
 ** Determinare il massimo di operandi contemporaneamente presenti sulla piladurante la valutazione della seguente espressione
@@ -660,5 +859,29 @@ che a poche parole sarebbe la linea di esecuzione
 #+begin_src java
 while(x<z){
     x=(5+z)*10;
+}
+#+end_src
+
+** Qual è il comando che viene tradotto nel codice seguente
+#+begin_src c
+iload x;
+iload z;
+if icomplt L0
+goto L1;
+L0:
+ldc 9;
+istore y;
+goto STOP;
+L1:
+iload x;
+istore y;
+goto STOP;
+#+end_src
+*** Risposta
+#+begin_src java
+if(x<y){
+    y=9;
+}else{
+   y=x;
 }
 #+end_src
