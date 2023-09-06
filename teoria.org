@@ -378,14 +378,14 @@ _a_ è un riferimento all'array nell'heap.
 |---------------+------------------------------|
 | produzioni    | descrizione                  |
 |---------------+------------------------------|
-| E \to E1 + E2 | somma                        |
-| E \to E1 - E2 | Sottrazione                  |
-| E \to E1 * E2 | moltiplicazione              |
-| E \to E1 / E2 | divisione intera             |
-| E \to E1 % E2 | resto della divisione intera |
-| E \to (E1)    | stesso valores di E1         |
-| E \to n       | costante                     |
-| E \to x       | variabile                    |
+| E → E1 + E2   | somma                        |
+| E → E1 - E2   | Sottrazione                  |
+| E → E1 * E2   | moltiplicazione              |
+| E → E1 / E2   | divisione intera             |
+| E → E1 % E2   | resto della divisione intera |
+| E → (E1)     | stesso valores di E1         |
+| E → n        | costante                     |
+| E → x        | variabile                    |
 |---------------+------------------------------|
 
 ** SDD per espresioni aritmetiche
@@ -452,12 +452,12 @@ in cima alla pila.
 |------------+-----------------|
 | Produzioni | Descrizione     |
 |------------+-----------------|
-| R \to ==   | Uguale          |
-| R \to !=   | Diverso         |
-| R \to <    | minore          |
-| R \to >    | maggiore        |
-| R \to ≤    | minore o uguale |
-| R \to ≥    | maggiore o ugu  |
+| R → ==     | Uguale          |
+| R → !=     | Diverso         |
+| R → <      | minore          |
+| R → >      | maggiore        |
+| R → ≤      | minore o uguale |
+| R → ≥      | maggiore o ugu  |
 |------------+-----------------|
 
 *** Attributi
@@ -470,9 +470,9 @@ in cima alla pila.
 |-------------+------------------------------------------------------------|
 | produzioni  | Regole Semantiche                                          |
 |-------------+------------------------------------------------------------|
-| B \to true    | B.code= goto B.true                                        |
-| B \to false   | B.code= goto B.false                                       |
-| B \to E1 R E2 | B.code= E1.code \ E2.code \ if icmpR B.true \ goto B.false |
+| B → true      | B.code= goto B.true                                        |
+| B → false     | B.code= goto B.false                                       |
+| B → E1 R E2   | B.code= E1.code \ E2.code \ if icmpR B.true \ goto B.false |
 |-------------+------------------------------------------------------------|
 
 
