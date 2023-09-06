@@ -79,6 +79,55 @@ quindi si puo simplificare come
 |       2 | {1,4} | {1,4} |
 |       3 |     2 |     0 |
 |---------+-------+-------|
+
+** Minimizzare il seguente DFA. Mostrare la _tabella di transizione completa_ del DFA minmo i cui stati sono le classi di equivalenza risultanti dalla minimizzazione, anhe nel caso in cui il DFA sia già minimo.
+|----+---+---|
+|    | a | b |
+|----+---+---|
+| 0  | 0 | 0 |
+| *1 | 0 | 0 |
+| *2 | 3 | 0 |
+| *3 | 3 | 0 |
+| 4  | 1 | 0 |
+| →5 | 2 | 4 |
+|----+---+---|
+*** Risposta
+la prima cosa che vediamo è che _*2_ e _*3_ sono uguali, allora facciamo l'unione
+|--------+-------+---|
+|        |     a | b |
+|--------+-------+---|
+| 0      |     0 | 0 |
+| *1     |     0 | 0 |
+| *{2,3} | {2,3} | 0 |
+| 4      |     1 | 0 |
+| →5     | {2,3} | 4 |
+|--------+-------+---|
+
+* automi a stati finiti
+** Dato il DFA, determinare quale delle seguenti stringhe  è accettata da A.
+|------+----+----|
+|      | 1  | 2  |
+|------+----+----|
+| q0   | q0 | q0 |
+| *q1  | q0 | q0 |
+| *q2  | q4 | q5 |
+| →*q3 | q0 | q2 |
+| q4   | q0 | q1 |
+| *q5  | q0 | q5 |
+|------+----+----|
+
+- [ ] 22
+- [ ] 12
+- [ ] 221
+- [ ] 122
+*** Risposta
+  (2)  (2)
+q3 → q2 → q5
+
+- [✓ ] 22
+- [X] 12
+- [X] 221
+- [X] 122
 * epsilon chiusura
 ** Detta α la funzione di transizione dell'automa seguente
 
@@ -109,6 +158,35 @@ allora δ(q1,01) contiene q4 e il ϵ di q4
 - [X] {q1,q4,q5}
 - [X] {q1,q3,q5}
 - [✓] {q1,q4,q5}
+** Detta α la funzione di transizione dell'automa seguente
+|------+------+------+---------|
+|      | c    | d    | ϵ        |
+|------+------+------+---------|
+| → q0 | {q1} | ø    | ø       |
+| q1   | ø    | ø    | {q2}    |
+| q2   | ø    | ø    | {q3,q5} |
+| q3   | ø    | {q4} | ø       |
+| q4   | ø    | ø    | {q3,q5} |
+| *q5  | ø    | ø    | ø       |
+|------+------+------+---------|
+
+quale dei seguenti insiemi corrisponde a δ(q4,dd)?
+
+- [ ] {q3,q4,q5}
+- [ ] {q2,q4,q5}
+- [ ] {q0,q4,q5}
+- [ ] {q1,q4,q5}
+
+*** Risposta
+  (ϵ)  (d)  (ϵ)  (d)
+q4 → q3 → q4 → q3 → q4
+
+e il δ(q4) = {q3,q5}∪{q4} = {q3,q4,q5}
+
+- [✓] {q3,q4,q5}
+- [X] {q2,q4,q5}
+- [X] {q0,q4,q5}
+- [X] {q1,q4,q5}
 
 * Espessioni regolari
 ** Data l'espressione regolare E=((10)*+1*)* sull alfabeto {0,1,2}, determinare quale delle seguenti string appartiene al linguaggio generato da E.
@@ -128,6 +206,40 @@ lasciando all'opzione *10110* come unica valida
 ** Definire un'espressione regolare sull'alfabeto {a,b,c} che generi il linguaggio delle stringhe in cui se non sono presenti a allora sono presenti b.
 *** Risposta
 ((a+c)*(c*)(a+c)*) + ((b+c)*(c*)(b+c)*)
+
+** Data l'espressione regolare E = (a* + bb)* sull'alfabeto {a,b,c}, determinare quale delle seguenti stringhe appartiene al linguaggio generato da E.
+
+- [ ] aaab
+- [ ] ab
+- [ ] bbab
+- [ ] aaa
+
+*** Risposta
+Secondo questo alfabeto, per forza devi trovare una serie pari di _b_. Quindi
+possiamo scartare tutte le risposte con una _b_ singola, lasciando solo a _aaa_.
+
+- [X] aaab
+- [X] ab
+- [X] bbab
+- [✓] aaa
+
+
+** Definire un'espressione regolare sull'alfabeto {a,b,c} che generi il linguaggio delle stringhe in cui la prima _a_, se presente è preceduta da un numero dispari di b.
+*** Risposta
+(b*cb*bb*)*a(b*cb*bb*)*
+**** (b*cb*bb*)*
+è la parte principale dell'espresionse regolare. questa parte permete un numero arbitrario di ocorrenze di questo patrone:
+
+- b*  :: permete 0 o piu _b_
+- c   :: coincide con la letra _c_
+- b*  :: permete 0 o piu _b_
+- bb* :: permete una _b_ seguita opzionalmente di piu _b_. questo ci conferma che ci sia un nuomer dispari di _b_.
+
+questo insieme ci permete stringhe che contengano la _c_ e un numero dispari di _b_ prima di qualsiasi _a_.
+**** a
+Simplemente coincide con la _a_.
+**** (b*cb*bb*)*
+molto simile a la prima parte. permete continuare facendo combinazioni con b e c.
 * pumping lemma
 ** Si suponga di voler dimostrare il pumping lemma per il linguaggio regolare L riconosciuto dal seguente DFA con 5 stati
 |-----+---+---|
@@ -163,6 +275,38 @@ z → bb
 - [X] x = c, y = b, z = bcb
 - [✓] x = c, y = bc, z = bb
 - [X] x = cb, y = c, z = bb
+
+** Si suponga di voler dimostrare il pumping lemma per il linguaggio regolare L riconosciuto dal seguente DFA con 5 stati
+|-----+---+---|
+|     | 1 | 2 |
+|-----+---+---|
+|   0 | 0 | 0 |
+| * 1 | 0 | 2 |
+|   2 | 1 | 2 |
+| → 3 | 1 | 2 |
+|-----+---+---|
+Si consideri ora la stringa _w = 221221_ ∈ L di lunghezza 6. Per concludere la
+dimostrazione vista a lezione viene scelta una partciolrae scomposizione *xyz* di w.
+Quale?
+- [ ] x = 22, y = 1, z = 221
+- [ ] x = 2, y = 21, z = 221
+- [ ] x = 221, y = 2, z = 21
+- [ ] x = 2, y = 2, z = 1221
+
+*** Risposta
+ (2) (2) (1) (2) (2) (1)
+3 → 2 → 2 → 1 → 2 → 2 → 1
+
+quindi dal inizio si riconosce che il _2 → 2_ non affetta al percorso.
+
+ (2)|  (2)  |(1) (2) (2) (1)
+3 → | 2 → 2 | → 1 → 2 → 2 → 1
+
+- [X] x = 22, y = 1, z = 221
+- [X] x = 2, y = 21, z = 221
+- [X] x = 221, y = 2, z = 21
+- [✓] x = 2, y = 2, z = 1221
+
 * Grammatiche
 ** Data la gramatica G avente simbolo iniziale B
 B → D | BaD
@@ -179,9 +323,26 @@ B → Bad → BaDaD → DaDaD → ϵaϵad → aad
 - [X] add
 ** Definire una CFG che generi il linguaggio {aᵐ(bc)ⁿ|0 ≤ m ≤ n}
 *** Risposta
+** Data la grammatica G avente simbolo iniziale E
+B → ϵ
+C → c | bC
+E → EBC | ϵ
+
+individuare quale tra le seguenti è una stringa generata da G
+
+- [ ] cbc
+- [ ] bb
+- [ ] bcb
+
+*** Risposta
+E → EBC → EBbC → EBbc → Ebc → EBCbc → BCbc → Cbc → cbc
+
+- [✓] cbc
+- [X] bb
+- [X] bcb
 
 * Derivazioni
-** data la grammatica G. Individuare quale tra le seguenti è una derivazione canonica *destra* di G.
+** data la grammatica G. Individuare quale tra le seguenti è una derivazione canonica _destra_ di G.
 A → EcC
 C → ϵ | A
 D → AbA
@@ -196,6 +357,26 @@ E → c
 - [X] D → AbA → EcCbA → EcAbA → EcEcCbA
 - [✓] D → AbA → AbEcC → AbEc → Abcc
 - [X] D → AbA → EcCbA → EcCbEcC → EcCbEcA
+** Data la grammatica G, Individuare quale tra le seguenti è una derivazione canonica _sinistra_ di G
+
+A → cb
+B → a | CE
+C → cAa
+E → adA
+
+
+- [ ] B → CE → cAaE → ccbaE → ccbaadA
+- [ ] B → CE → CadA → cAaadA → cAaadcb
+- [ ] B → CE → CadA → Cadcb → cAaadcb
+- [ ] B → CE → cAaE → cAaadA → cAaadcb
+
+*** Risposta
+
+- [✓] B → CE → cAaE → ccbaE → ccbaadA
+- [X] B → CE → CadA → cAaadA → cAaadcb
+- [X] B → CE → CadA → Cadcb → cAaadcb
+- [X] B → CE → cAaE → cAaadA → cAaadcb
+
 * automi a pila
 ** Sia P = ({q},{a,c},{a,c,B,D,E},δ,q,E,{q}) un automa a pila che esegue la mossa
                            (q,a,EBB) ⊢ₚ (q,a,BDaBBB)
@@ -207,6 +388,23 @@ Quale delle seguenti relazioni giustifica questa mossa?
 | (q,BDa)      | ∈ | (q,ϵ,E)     |
 |--------------+---+------------|
 quindi la risposta giusta sarebbe (q,BDa) ∈ (q,ϵ,E)
+** Sia P = ({q},{a,b,c,d},{a,c,d,B,C,D,E},δ,q,C,{q})un automa a pila che esegue la mossa
+                            (q,cdc,cEc) ⊢ₚ (q,dc,Ec)
+Quale delle seguenti relazioni giustifica questa mossa?
+
+*** Risposta
+ora si inverte(non sono sicuro perche)
+
+| (q,dc,Ec) | → | (q,cdc,cEc) |
+|-----------+---+-------------|
+| togli     |   | aggiungi    |
+|-----------+---+-------------|
+| (q,ϵ)      |   | (q,c,c)     |
+
+pratticamente non toglie niente e aggiunge una c in ogni parola
+
+Risposta: (q,ϵ) ∈ (q,c,c)
+
 * Grammatiche LL(1)
 ** Le seguenti produzioni appartengono a una grammatica G avente simbolo iniziale B
 
@@ -253,6 +451,13 @@ E → Bd
 | D → E   | {c,d} |
 | E → Bd  | {c,d} |
 |---------+-------|
+** Le seguenti produzioni appartengono a una grammatica G avente simbolo iniziale D
+                               A → ϵ | ac | aB
+Quale tra le seguenti relazioni è *sicuramente* vera senza conoscere l'intera grammatica.
+
+- [ ] FOLLOW(A) ⊆ FOLLOW(B)
+- [ ] c ∈ FOLLOW(A)
+- [ ] a ∈ FOLLOW(A)
 
 * Attributi
 ** Le seguente produzione con asscoate _regole semantiche_ in cui gli Sᵢ (se presenti) sonon attributi _sintetizzati_ e gli eᵢ (se presenti) sono attributi _ereditati_, appartiene a una SDD
@@ -272,6 +477,23 @@ E → Bd
 - [X] che puo essere L-attribuita ma non S-attribuita
 - [✓] che puo essere S-attribuita.
 - [X] che non è L-attribuita
+
+** Le seguente produzione con asscoate _regole semantiche_ in cui gli Sᵢ (se presenti) sonon attributi _sintetizzati_ e gli eᵢ (se presenti) sono attributi _ereditati_, appartiene a una SDD
+
+                   A → BCDE {A.s₀=E.s₁, A.s₂=B.s₀, A.e₂=D.s₂}
+
+- [ ] che puo essere L-attribuita ma non S-attribuita
+- [ ] che puo essere S-attribuita
+- [ ] che non è L-attribuita
+*** Risposta
+Non puo essere _S-Atribuitta_ perche ha A.e₂, che sarebbe un'attributo ereditato.
+Essendo una produzione non viene limitato a guardare alla sua sinistra, quindi puo
+essere un L-attribuita.
+
+- [✓] che puo essere L-attribuita ma non S-attribuita
+- [X] che puo essere S-attribuita
+- [X] che non è L-attribuita
+
 
 * analisi statica
 ** Determinare il massimo di operandi contemporaneamente presenti sulla piladurante la valutazione della seguente espressione
@@ -318,6 +540,48 @@ E → Bd
 **** conclusione
 nessun punto dell'espressione opera con piu di *2* operandi.
 
+** Determinare il massimo di operandi contemporaneamente presenti sulla piladurante la valutazione della seguente espressione
+5 - z + (z + x) + 7
+*** Risposta
+lo stack secondo le struzioni viene:
+#+begin_src C
+ldc 5;
+iload z;
+isub;
+#+end_src
+|---+-------|
+| Nᵒ | stack |
+|---+-------|
+| 2 | z     |
+| 1 | 5     |
+|---+-------|
+
+#+begin_src C
+iload(z);
+iload(x);
+iadd;
+iadd;
+#+end_src
+|---+-------|
+| Nᵒ | stack |
+|---+-------|
+| 3 | x     |
+| 2 | z     |
+| 1 | 5 - z |
+|---+-------|
+
+#+begin_src C
+ldc 7;
+iadd;
+#+end_src
+|---+---------------|
+| Nᵒ | stack         |
+|---+---------------|
+| 2 | 7             |
+| 1 | 5 - z + (z+x) |
+|---+---------------|
+
+ci sono massimo 3 operandi
 * traduzione inversa
 ** Qual è il comando che viene tradotto nel codice seguente
 #+begin_src c
@@ -334,4 +598,49 @@ ldc 10;
 imul;
 istore x;
 goto L0;
+#+end_src
+*** Risposta
+analizzando i pezzi del codice abbiamo:
+
+#+begin_src C
+L0:
+....
+goto L0
+#+end_src
+questa chiamata della fine che ci riporta all'inizio è un _while_
+#+begin_src java
+while(){
+}
+#+end_src
+
+
+
+#+begin_src c
+iload x;
+iload z;
+if icomplt L1;
+goto STOP;
+#+end_src
+questo pezzo ci fa  _x<z_ o salta a _STOP_
+#+begin_src java
+while(x<z){
+}
+#+end_src
+
+
+finalmente ci mettiamo all'esecuzione del codice L1
+#+begin_src c
+L1:
+ldc 5;
+iload z;
+iadd;
+ldc 10;
+imul;
+istore x;
+#+end_src
+che a poche parole sarebbe la linea di esecuzione
+#+begin_src java
+while(x<z){
+    x=(5+z)*10;
+}
 #+end_src
