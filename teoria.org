@@ -43,12 +43,12 @@
     
    sapendo che FIRST(S) = FIRST(Ac)∪ FIRST(Ba) = FIRST(A) ∪ FIRST(c) ∪ FIRST(B)
     
-   FIRST(A)= FIRST(ϵ) ∪ FIRST(a) = \empty ∪ {a}
+   FIRST(A)= FIRST(ϵ) ∪ FIRST(a) = ø ∪ {a}
    FIRST(B)= FIRST(b) = {b}
-   FIRST(C)= FIRST(a) \cup FIRST(Cb) = {a} \cup FIRST(C) = {a}
-   FIRST(D)= FIRST(\epsilon) \cup FIRST(d) \cup FIRST(Db) = {d} \cup FIRST(D) \cup FIRST(b) = {b,d}
+   FIRST(C)= FIRST(a) ∪ FIRST(Cb) = {a} ∪ FIRST(C) = {a}
+   FIRST(D)= FIRST(ϵ) ∪ FIRST(d) ∪ FIRST(Db) = {d} ∪ FIRST(D) ∪ FIRST(b) = {b,d}
     
-   Quindi possiamo chiuedere riprendendo FIRST(S) come {a} \cup {b} \cup {c} = {a,b,c}
+   Quindi possiamo chiuedere riprendendo FIRST(S) come {a} ∪ {b} ∪ {c} = {a,b,c}
 
 * FOLLOW: Seguiti di una variabile
   _FOLLOW(A)_ è l'insieme dei simboli terminali che possono seguire A in 
