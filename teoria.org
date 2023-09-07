@@ -139,6 +139,26 @@ quindi  usando le tabelle di prima
   - L → Il parser cerca di costruire una _direvazione canonica sinistra_ (leftmost)
   - 1 → Il parser usa _un solo simbolo terminale_ della stringa per scegliere la produzione.
 
+* Automi a pila
+** Il problema si lege cosi
+(q,bcbbb,Cbb)⊢ₚ(q,bcbbb,Cbbb)
+
+        PRIMA                 DOPO
+|-----+--------+------+-----+--------+-------|
+| (q, | bcbbb, | Cbb) | (q, | bcbbb, | Cbbb) |
+|   1 |      2 |    3 |   1 |      2 |     3 |
+|-----+--------+------+-----+--------+-------|
+
+** Si rispondi
+(q,Cb) ∈ δ(q,ϵ,C)
+
+che significa
+
+|-----+----------------+-----+-------------------------+-------------------------|
+| (q, | Cb)            | (q, | ϵ,                       | C)                      |
+|     | Cosa aggiungo? |     | Cosa tolgo del blocco 2 | Cosa tolgo nel 3 blococ |
+|-----+----------------+-----+-------------------------+-------------------------|
+
 * 5.1 Definizioni dirette dalla sintassi (SDD)
   
   Una Definizioni dirette dalla sintassi è una grammatica le cui produziono 
