@@ -49,7 +49,7 @@ q2 → q4 → q4 → q3 → q4 → q3
 - [X] dccdc
 - [X] ddccc
 * Minimizzazione
-
+** minimizza
 minimizzare il seguente DFA
 
 |-----+---+---+------------|
@@ -152,6 +152,38 @@ la prima cosa che vediamo è che _*2_ e _*3_ sono uguali, allora facciamo l'unio
 | 4      |     1 | 0 |
 | →5     | {2,3} | 4 |
 |--------+-------+---|
+** pagina 21
+|-----+---+---|
+|     | 0 | 1 |
+|-----+---+---|
+| 0   | 0 | 0 |
+| →*1 | 3 | 4 |
+| *2  | 2 | 0 |
+| *3  | 3 | 0 |
+| *4  | 2 | 4 |
+|-----+---+---|
+*** Risposta
+In questo caso non funziona quello di sempre.
+2 e 3 vengono simplificati per essere entrambi recorsivi(una volta che si entra non si esce). volendo anche potrebbe minimizzarlo anche con il 0. ma per qualche
+motivo non si ha fatto in nessuna delle risposte, devo chiedere perche.
+
+|--------+-------+---|
+|        | 0     | 1 |
+|--------+-------+---|
+| 0      | 0     | 0 |
+| →*1    | {2.3} | 4 |
+| *{2,3} | {2,3} | 0 |
+| *4     | {2,3} | 1 |
+|--------+-------+---|
+e ora 1 e 4 vano allo stesso punto con 0 e verso l'altro con 1. quindi anche possiamo simplificarlo.
+
+|---------+-------+-------|
+|         | 0     |     1 |
+|---------+-------+-------|
+| 0       | 0     |     0 |
+| →*{1,4} | {2.3} | {1,4} |
+| *{2,3}  | {2,3} |     0 |
+|---------+-------+-------|
 
 * epsilon chiusura
 ** Detta α la funzione di transizione dell'automa seguente
@@ -310,6 +342,9 @@ molto simile a la prima parte. permete continuare facendo combinazioni con b e c
 - [✓] cbcbc
 - [X] bcbcb
 
+** Definire un'espressione regolare sull'alfabeto {a,c,s} che generi il linguaggio delle stringhe che iniziano con _as_, finiscono con _sa_  in cui è presente una sola occorrenza della sottostringa _sa_ (alla fine). Ad esempio, le stringhe _asccscsa_, _asa_ , _asssssa_ appartengono al linguaggio, mentre _asas_, _casa_, e _ascsasa_ no.
+*** Risposta
+as((a+c)*+(s+c)*)sa
 * pumping lemma
 ** Si suponga di voler dimostrare il pumping lemma per il linguaggio regolare L riconosciuto dal seguente DFA con 5 stati
 |-----+---+---|
@@ -472,6 +507,9 @@ X : B → BCD → cbc
 - [X] bcc
 - [✓] cb
 
+** Definire una CFG che generi il linguaggio {aᵐb^(m+n mod2) aⁿ}
+*** Risposta
+
 * Derivazioni
 ** data la grammatica G. Individuare quale tra le seguenti è una derivazione canonica _destra_ di G.
 
@@ -559,6 +597,30 @@ pratticamente non toglie niente e aggiunge una c in ogni parola
 
 Risposta: (q,ϵ) ∈ (q,c,c)
 
+** Sia P = ({q},{a,b,c,d},{a,bc,d,A,C,D},δ,q,C,{q}) un automa a pila che esegue la mossa
+
+                         (q,bcbbb,Cbb)⊢ₚ(q,bcbbb,Cbbb)
+
+Quale delle seguenti relazioni giustifica questa mossa?
+
+- [ ] (q,Cb) ∈ δ(q,ϵ,C)
+- [ ] (q,D) ∈ δ(q,ϵ,C)
+- [ ] (q,ϵ) ∈ δ(q,b,b)
+- [ ] (q,b) ∈ δ(q,ϵ,A)
+*** Risposta
+(q,Cb) ∈ δ(q,ϵ,C)
+
+che significa
+|-----+----------------+-----+-------------------------+-------------------------|
+| (q, | Cb)            | (q, | ϵ,                       | C)                      |
+|     | Cosa aggiungo? |     | Cosa tolgo del blocco 2 | Cosa tolgo nel 3 blococ |
+|-----+----------------+-----+-------------------------+-------------------------|
+
+- [✓] (q,Cb) ∈ δ(q,ϵ,C)
+- [X] (q,D) ∈ δ(q,ϵ,C)
+- [X] (q,ϵ) ∈ δ(q,b,b)
+- [X] (q,b) ∈ δ(q,ϵ,A)
+
 * Grammatiche LL(1)
 ** Le seguenti produzioni appartengono a una grammatica G avente simbolo iniziale B
 
@@ -612,6 +674,12 @@ Quale tra le seguenti relazioni è *sicuramente* vera senza conoscere l'intera g
 - [ ] FOLLOW(A) ⊆ FOLLOW(B)
 - [ ] c ∈ FOLLOW(A)
 - [ ] a ∈ FOLLOW(A)
+
+*** Risposta
+
+- [X] FOLLOW(A) ⊆ FOLLOW(B)
+- [X] c ∈ FOLLOW(A)
+- [✓] a ∈ FOLLOW(A)
 
 ** Data la seguente grammatica il cui simbolo iniziale è E. mostrare FIRST e FOLLOW di tutte le variabili e gli insimi guida di tutte le produzioni. La grammatica è LL(1)?
                                   A → EB  | bbC
@@ -677,6 +745,47 @@ GUIDA(A → α) = FIRST(α) ∪ FIRST(A), se NULL(α)
 | E → ϵ       | FOLLOW(E)                       | {$,d} |
 |------------+---------------------------------+-------|
 
+** Le seguenti produzioni appartengono a una grammatica G avente simbolo iniziale D
+                               A → abd | Cc | Ea
+Quale tra le seguenti relazioni è *sicuramente* vera senza conoscere l'intera grammatica?
+- [ ] a ∈ FOLLOW(E)
+- [ ] FOLLOW(E) ⊆ FOLLOW(A)
+- [ ] d ∈ FOLLOW(A)
+*** Risposta
+
+_a ∈ FOLLOW(E)_ vuol dire che _a_ viene dopo l'essecuzione di E.
+
+- [✓] a ∈ FOLLOW(E)
+- [X] FOLLOW(E) ⊆ FOLLOW(A)
+- [X] d ∈ FOLLOW(A)
+
+** Data la seguente grammatica il cui simbolo iniziale è C. mostrare FIRST e FOLLOW di tutte le variabili e gli insimi guida di tutte le produzioni. La grammatica è LL(1)?
+A → Ebc | ad
+B → ϵ
+C → BdE | BAb
+E → ϵ
+*** Risposta
+
+|---+------+---------+---------|
+|   | NULL | FIRST   | FOLLOW  |
+|---+------+---------+---------|
+| A |      | {a,b}   | b       |
+| B | ✓    | ø       | {a,b,d} |
+| C |      | {a,b,d} | $       |
+| E | ✓    | ø       | {$,b}   |
+|---+------+---------+---------|
+
+GUIDA(A → α) = FIRST(α) ∪ FIRST(A), se NULL(α)
+             = FIRST(α)           , altrimenti
+
+GUIDA(A → Ebc) = FIRST(E) ∪ FIRST(b) = {b}
+GUIDA(A → ad) = FIRST(a) ∪ = {a}
+GUIDA(B → ϵ)  = FOLLOW(B) =  {a,b,d}
+GUIDA(C → BdE) = FIRST(d) = {d}
+GUIDA(C → BAb) = FIRST(B) ∪ FIRST(A) = FIRST(A) = {a,b}
+GUIDA(E → ϵ) = FOLLOW(E) = {$,b}
+
+
 * Attributi
 ** Le seguente produzione con asscoate _regole semantiche_ in cui gli Sᵢ (se presenti) sonon attributi _sintetizzati_ e gli eᵢ (se presenti) sono attributi _ereditati_, appartiene a una SDD
 
@@ -711,6 +820,21 @@ essere un L-attribuita.
 - [✓] che puo essere L-attribuita ma non S-attribuita
 - [X] che puo essere S-attribuita
 - [X] che non è L-attribuita
+
+** Le seguente produzione con asscoate _regole semantiche_ in cui gli Sᵢ (se presenti) sonon attributi _sintetizzati_ e gli eᵢ (se presenti) sono attributi _ereditati_, appartiene a una SDD
+
+                   A → BCD {A.s₀=D.s₂, A.s₁=D.s₀, A.e₀= C.e₂,C.e₂=A.e₂}
+
+- [ ] che puo essere L-attribuita ma non S-attribuita
+- [ ] che puo essere S-attribuita
+- [ ] che non è L-attribuita
+*** Risposta
+
+non puo essere L-attribuita perche sta dichiarando C.e₂=A.e₂, e la  C va dopo che la A nel SDD
+
+- [X] che puo essere L-attribuita ma non S-attribuita
+- [X] che puo essere S-attribuita
+- [✓] che non è L-attribuita
 
 * analisi statica
 ** Determinare il massimo di operandi contemporaneamente presenti sulla piladurante la valutazione della seguente espressione
@@ -799,6 +923,49 @@ iadd;
 |---+---------------|
 
 ci sono massimo 3 operandi
+** Determinare il massimo di operandi contemporaneamente presenti sulla piladurante la valutazione della seguente espressione
+y * y / 5 + 2
+*** Risposta
+il codice deve iniziare insirendo le prime numeri di moltiplicazione e divisone con
+#+begin_src C
+iload y;
+iload y;
+ldc 5;
+#+end_src
+
+| 5 |
+| y |
+| y |
+|---|
+count=3
+per dopo fare l'operazioni di divisione e moltiplicazione
+#+begin_src C
+idiv
+imul
+#+end_src
+che va da
+| 5        |            |
+| y        | /          |
+| y        | *          |
+|----------+------------|
+| operandi | operazioni |
+a
+| y*y/5 |
+|-------|
+count=1
+ora si mete il +2
+#+begin_src c
+ldc 2
+iadd
+#+end_src
+| 2        |            |
+| y*y/5    | +          |
+|----------+------------|
+| operandi | operazioni |
+count=2
+
+_il numero massimo di operandi sarebbe 3_
+
 * traduzione inversa
 ** Qual è il comando che viene tradotto nel codice seguente
 #+begin_src c
