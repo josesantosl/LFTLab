@@ -1052,3 +1052,45 @@ if(x<y){
    y=x;
 }
 #+end_src
+
+* Schemi di traduzione
+** Definire uno schema di traduzione _(SDT)_ e il codice¹ Java del parser ricorsivo dicsendente che riconosce il linguaggio delle stringue della forma _aᵏbc²ᵏ_ e che calcola il numero totale di simboli presenti
+
+*** SDD
+S → A
+A → aAcc | b
+*** SDT
+S → A {System.out.println(1 + A.val*3)}
+A → aAcc{A.val = A.i + 1} | b
+*** Parser
+#+begin_src java
+private void S(){
+    switch(look.token){
+        case 'a':
+        case 'b':
+            int val = A(0);
+            match(Tag.EOF);
+            System.out.println(1 + val*3);
+            break;
+        default:
+            error("not valid token");
+    }
+}
+
+private int A(int i){
+    int val = i;
+    switch(look.token){
+        case 'a':
+            match('a');
+            val = A(val+1);
+            match('c');
+            match('c');
+            break;
+        case 'b':
+            match('b');
+        default:
+            error("not valid token");
+    }
+    return val;
+}
+#+end_src
