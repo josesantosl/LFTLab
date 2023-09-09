@@ -116,8 +116,10 @@
 * Insieme GUIDA(A→α)
   è un insieme di simboli terminali che posso aspettare di vedere in stringhe che 
   derivano di A.
-  GUIDA(A → α) = FIRST(α) ∪ FIRST(A), se NULL(α)
-               = FIRST(α)           , altrimenti
+  GUIDA(A → ϵ) = FOLLOW(A)
+  GUIDA(A → B) = FOLLOW(A), se B → ϵ
+  GUIDA(A → B) = {α, FOLLOW(A)}, se B → α|ϵ
+  GUIDA(A → B) = FIRST(B) = α , se B → α
 
 quindi  usando le tabelle di prima
 
@@ -132,7 +134,7 @@ quindi  usando le tabelle di prima
 |---+------+-------+--------+-------|
 * Grammatiche LL(1)
   diciamo che una grammatcia G=(VTPS) è LL(1) se per ogni coppia di produzioni 
-  distente A\to\alpha e A→α in P, abbiamo che
+  distente A→α e A→α in P, abbiamo che
            GUIDA(A→α) ∩ GUIDA(A→β) = ø
 
   - L → La stringa in input viene analizzata _da sinistra(LEFT) a destra_

@@ -84,7 +84,7 @@ minimizzare il seguente DFA
 | 4   | 1 | 0 |            |
 | ->5 | 2 | 4 |            |
 |-----+---+---+------------|
-
+*** Risposta
 |--------+-------+-----|
 |        | 0     | 1   |
 |--------+-------+-----|
@@ -229,6 +229,26 @@ invece 0 e *1 non possono essere collegato perche *1 è uno stato finale.
 | *2     | 1 |     0 |
 | →{3,4} | 2 | {3,4} |
 |--------+---+-------|
+** 4 di p2 stevina
+|-----+---+---|
+|     | 0 | 1 |
+|-----+---+---|
+|   0 | 0 | 0 |
+|  *1 | 3 | 2 |
+|   2 | 1 | 1 |
+|   3 | 2 | 0 |
+| →*4 | 3 | 2 |
+|-----+---+---|
+*** Risposta
+
+|---------+-------+-------|
+|         |     0 |     1 |
+|---------+-------+-------|
+|       0 |     0 |     0 |
+| →*{1,4} |     3 |     2 |
+|       2 | {1.4} | {1.4} |
+|       3 |     2 |     0 |
+|---------+-------+-------|
 * epsilon chiusura
 ** Detta α la funzione di transizione dell'automa seguente
 
@@ -367,7 +387,8 @@ lasciando all'opzione *10110* come unica valida
 
 ** Definire un'espressione regolare sull'alfabeto {a,b,c} che generi il linguaggio delle stringhe in cui se non sono presenti a allora sono presenti b.
 *** Risposta
-((a+c)*(c*)(a+c)*) + ((b+c)*(c*)(b+c)*)
+
+(a+c)*a(a+c)* + (b+c)*b(b+c)*
 
 ** Data l'espressione regolare E = (a* + bb)* sull'alfabeto {a,b,c}, determinare quale delle seguenti stringhe appartiene al linguaggio generato da E.
 
@@ -385,10 +406,9 @@ possiamo scartare tutte le risposte con una _b_ singola, lasciando solo a _aaa_.
 - [X] bbab
 - [✓] aaa
 
-
 ** Definire un'espressione regolare sull'alfabeto {a,b,c} che generi il linguaggio delle stringhe in cui la prima _a_, se presente è preceduta da un numero dispari di b.
 *** Risposta
-(b*cb*bb*)*a(b*cb*bb*)*
+((b*cb*bb*)*a(a+b+c)*) + (c+b)*
 **** (b*cb*bb*)*
 è la parte principale dell'espresionse regolare. questa parte permete un numero arbitrario di ocorrenze di questo patrone:
 
@@ -399,9 +419,11 @@ possiamo scartare tutte le risposte con una _b_ singola, lasciando solo a _aaa_.
 
 questo insieme ci permete stringhe che contengano la _c_ e un numero dispari di _b_ prima di qualsiasi _a_.
 **** a
-Simplemente coincide con la _a_.
-**** (b*cb*bb*)*
-molto simile a la prima parte. permete continuare facendo combinazioni con b e c.
+Simplemente coincide con la _prima a_.
+**** (a+b+c)*
+permette di continuare liberamente la stringa con tutto l'alfabeto
+**** + (c+b)*
+permete di fare stringhe libere senza presenza della  _a_.
 ** Data l'espressione regolare E = (bcb+c*)* sull'alfabeto {a,b,c}, determinare quale delle seguenti stringhe appartiene al linguaggio generato da E.
 
 - [ ] cbc
@@ -415,10 +437,10 @@ molto simile a la prima parte. permete continuare facendo combinazioni con b e c
 - [✓] cbcbc
 - [X] bcbcb
 
-** Definire un'espressione regolare sull'alfabeto {a,c,s} che generi il linguaggio delle stringhe che iniziano con _as_, finiscono con _sa_  in cui è presente una sola occorrenza della sottostringa _sa_ (alla fine). Ad esempio, le stringhe _asccscsa_, _asa_ , _asssssa_ appartengono al linguaggio, mentre _asas_, _casa_, e _ascsasa_ no.
+** TODO Definire un'espressione regolare sull'alfabeto {a,c,s} che generi il linguaggio delle stringhe che iniziano con _as_, finiscono con _sa_  in cui è presente una sola occorrenza della sottostringa _sa_ (alla fine). Ad esempio, le stringhe _asccscsa_, _asa_ , _asssssa_ appartengono al linguaggio, mentre _asas_, _casa_, e _ascsasa_ no.
 
 *** Risposta
-as((a+c)*+(s+c)*)sa
+as((a+c)*+s*c*)sa + asa
 ** Data l'espressione regolare E = ((0+2)1*0*)* sull'alfabeto {0,1,2}, determinare quale delle seguienti sitring appartiene al linguaggio generato da E.
 - [ ] 10
 - [ ] 01
@@ -430,6 +452,24 @@ la risposta è _01_ perche per forza deve iniziare con 0 o 2.
 - [✓] 01
 - [X] 120
 - [X] 122
+** Sia k la piu piccola cifra non nulla del proprio numero di matricola. Definire un'espresione regolare sull'alfabeto {a,b} che generi il linguaggio delle stringhe in cui _ogni a è immediatamente seguita da non più di k b_.
+*** Risposta
+usando _K=2_
+alcune possibile risposte sono:
+
+- b*(a(b+ϵ)(ϵ+b)* :: si mette una quantita indefinita di _b_, e dopo vengono messi una _a_ dopo un insime di b anullabile.
+
+- b*(a(b+bb))* :: Da Elisa. una quantita indefinita di b, e dopo una quantita indefinita de  a seguiti da b o bb.
+
+- b*(a(b+ϵ)ᵏ)* :: Questo è _MIO_. l'ho fatto in base al primo. l'unica diferenza sarebbe elevando (b+ϵ)ᵏ per avere una _K_ non definita.
+
+** Definire una espressione regolare che generi il linguaggio delle stringhe di a,b e c _che non iniziano né finiscono con c e in cui le c (se sono presenti) sono tutte adiacienti_
+*** Risposta
+prima cosa da chiarire, adiacente vuol dire tutti insiemi
+
+Deve iniziare con un (a+b) per avere alemno una a o b. e dopo (a+b)*c*(a+b)*. alla fine è:
+                              (a+b)(a+b)*c*(a+b)* + ϵ
+
 * pumping lemma
 ** Si suponga di voler dimostrare il pumping lemma per il linguaggio regolare L riconosciuto dal seguente DFA con 5 stati
 |-----+---+---|
@@ -547,14 +587,6 @@ B → Bad → BaDaD → DaDaD → ϵaϵad → aad
 - [X] dda
 - [✓] aad
 - [X] add
-** Definire una CFG che generi il linguaggio {aᵐ(bc)ⁿ|0 ≤ m ≤ n}
-*** Risposta
-** Definire una CFG che generi il linguaggio {(ab)ⁱ(ba)ʲ|0 ≤ i ≤ j}
-*** Risposta
-A → ab | abAB
-B → ba
-**** test
-A → abAB → ababABB → abababBB → abababbaba
 ** Data la grammatica G avente simbolo iniziale E
 B → ϵ
 C → c | bC
@@ -592,8 +624,26 @@ X : B → BCD → cbc
 - [X] bcc
 - [✓] cb
 
+* Grammatiche libere
+** Definire una CFG che generi il linguaggio {aᵐ(bc)ⁿ|0 ≤ m ≤ n}
+*** Risposta
+A → bc | BbcA | ϵ
+B → a
+** Definire una CFG che generi il linguaggio {(ab)ⁱ(ba)ʲ|0 ≤ i ≤ j}
+*** Risposta
+A → ba | BAab | ϵ
+B → ab
+**** test
+A → abAB → ababABB → abababBB → abababbaba
 ** Definire una CFG che generi il linguaggio {aᵐb^(m+n mod2) aⁿ}
 *** Risposta
+S → ϵ | B | aSa
+B → ϵ | ab
+** Definire una grammatica libera dal contesto che generi il linguaggio {aᵐb^(m+n)cⁿ, m,n ≥ 0}
+*** Risposta
+S → AC
+A → aAb | ϵ
+C → bCc | ϵ
 
 * Derivazioni
 ** data la grammatica G. Individuare quale tra le seguenti è una derivazione canonica _destra_ di G.
@@ -742,6 +792,7 @@ Nello stato q, non si mette niente(ϵ) e toglia una _a_ della stringa e una _a_ 
 - [✓] (q,ϵ) ∈ δ(q,a,a)
 - [X] (q,ϵ) ∈ δ(q,ϵ,B)
 * Grammatiche LL(1)
+** Quiz
 ** Le seguenti produzioni appartengono a una grammatica G avente simbolo iniziale B
 
                                A → Ecc | caE | cb
@@ -764,6 +815,72 @@ Argomentando un po ogni possibile risposta:
 - [X] c ∈ FOLLOW(A)
 - [X] FOLLOW(B) ⊂ FOLLOW(A)
 
+** Le seguenti produzioni appartengono a una grammatica G avente simbolo iniziale D
+                               A → ϵ | ac | aB
+Quale tra le seguenti relazioni è *sicuramente* vera senza conoscere l'intera grammatica.
+
+- [ ] FOLLOW(A) ⊆ FOLLOW(B)
+- [ ] c ∈ FOLLOW(A)
+- [ ] a ∈ FOLLOW(A)
+
+*** Risposta
+
+- [X] FOLLOW(A) ⊆ FOLLOW(B)
+- [X] c ∈ FOLLOW(A)
+- [✓] a ∈ FOLLOW(A)
+
+** Le seguenti produzioni appartengono a una grammatica G avente simbolo iniziale D
+                               A → abd | Cc | Ea
+Quale tra le seguenti relazioni è *sicuramente* vera senza conoscere l'intera grammatica?
+- [ ] a ∈ FOLLOW(E)
+- [ ] FOLLOW(E) ⊆ FOLLOW(A)
+- [ ] d ∈ FOLLOW(A)
+*** Risposta
+
+_a ∈ FOLLOW(E)_ vuol dire che _a_ viene dopo l'essecuzione di E.
+
+- [✓] a ∈ FOLLOW(E)
+- [X] FOLLOW(E) ⊆ FOLLOW(A)
+- [X] d ∈ FOLLOW(A)
+
+** Le seguenti produzioni appartengono a una grammatica G avente simbolo iniziale E
+
+C → E | DCb
+D → E
+E → ϵ | aC
+
+individuare quale, tra le seguenti è una stringa generata da G.
+- [ ] b
+- [ ] aaa
+- [ ] aba
+*** Risposta
+E → aC → aE → aaC → aaE → aaaC → aaaE → aaa
+
+- [X] b
+- [✓] aaa
+- [X] aba
+
+** Le seguenti produzioni appartengono a una grammatica G avente simbolo iniziale D
+
+                               A → d | ϵ | BCA
+
+Quale tra le seguenti relazioni è _sicuramente_ vera senza conoscere l'intera grammatica
+- [ ] d ∈ FOLLOW(C)
+- [ ] FOLLOW(B) ⊂ FOLLOW(A)
+- [ ] FOLLOW(C) ⊂ FOLLOW(D)
+
+*** Risposta
+- _FOLLOW(B) ⊂ FOLLOW(A)_ non puo essere perche _FOLLOW(B) ⊂ FOLLOW(c)_
+- _FOLLOW(C) ⊂ FOLLOW(D)_ non puo essere perche non si trova D in questa produzione.
+quindi l'unica restante è _d ∈ FOLLOW(C)_ perche FOLLOW(C) = FIRST(A)= FIRST(d) = {d}
+
+- [✓] d ∈ FOLLOW(C)
+- [X] FOLLOW(B) ⊂ FOLLOW(A)
+- [X] FOLLOW(C) ⊂ FOLLOW(D)
+
+
+
+** Esercizo completo
 ** Data la seguente grammatica il cui simbolo iniziale è D. mostrare FIRST e FOLLOW di tutte le variabili e gli insimi guida di tutte le produzioni. La grammatica è LL(1)?
 B → c|CBC
 C → ϵ|d
@@ -787,25 +904,11 @@ E → Bd
 | D → E   | {c,d} |
 | E → Bd  | {c,d} |
 |---------+-------|
-** Le seguenti produzioni appartengono a una grammatica G avente simbolo iniziale D
-                               A → ϵ | ac | aB
-Quale tra le seguenti relazioni è *sicuramente* vera senza conoscere l'intera grammatica.
-
-- [ ] FOLLOW(A) ⊆ FOLLOW(B)
-- [ ] c ∈ FOLLOW(A)
-- [ ] a ∈ FOLLOW(A)
-
-*** Risposta
-
-- [X] FOLLOW(A) ⊆ FOLLOW(B)
-- [X] c ∈ FOLLOW(A)
-- [✓] a ∈ FOLLOW(A)
-
 ** Data la seguente grammatica il cui simbolo iniziale è E. mostrare FIRST e FOLLOW di tutte le variabili e gli insimi guida di tutte le produzioni. La grammatica è LL(1)?
-                                  A → EB  | bbC
-                                  B → ϵ
-                                  C → c
-                                  E → dAd | ϵ
+A → EB  | bbC
+B → ϵ
+C → c
+E → dAd | ϵ
 *** Risposta
 iniziando da _E_
 **** NULL, FIRST & FOLLOW
@@ -865,20 +968,6 @@ GUIDA(A → α) = FIRST(α) ∪ FIRST(A), se NULL(α)
 | E → ϵ       | FOLLOW(E)                       | {$,d} |
 |------------+---------------------------------+-------|
 
-** Le seguenti produzioni appartengono a una grammatica G avente simbolo iniziale D
-                               A → abd | Cc | Ea
-Quale tra le seguenti relazioni è *sicuramente* vera senza conoscere l'intera grammatica?
-- [ ] a ∈ FOLLOW(E)
-- [ ] FOLLOW(E) ⊆ FOLLOW(A)
-- [ ] d ∈ FOLLOW(A)
-*** Risposta
-
-_a ∈ FOLLOW(E)_ vuol dire che _a_ viene dopo l'essecuzione di E.
-
-- [✓] a ∈ FOLLOW(E)
-- [X] FOLLOW(E) ⊆ FOLLOW(A)
-- [X] d ∈ FOLLOW(A)
-
 ** Data la seguente grammatica il cui simbolo iniziale è C. mostrare FIRST e FOLLOW di tutte le variabili e gli insimi guida di tutte le produzioni. La grammatica è LL(1)?
 A → Ebc | ad
 B → ϵ
@@ -905,40 +994,110 @@ GUIDA(C → BdE) = FIRST(d) = {d}
 GUIDA(C → BAb) = FIRST(B) ∪ FIRST(A) = FIRST(A) = {a,b}
 GUIDA(E → ϵ) = FOLLOW(E) = {$,b}
 
-** Le seguenti produzioni appartengono a una grammatica G avente simbolo iniziale E
+** Data la seguente grammatica il cui simbolo iniziale è A. mostrare FIRST, FOLLOW di tutte le variabili e gli insiemi guida di tutte le produzioni. La grammatica è LL(1)?
+A → DDc
+B → ϵ
+D → aB | b | ϵ
+*** Risposta
+**** NULL, FIRST & FOLLOW
+|---+------+---------+---------------------|
+|   | NULL | FIRST   | FOLLOW              |
+|---+------+---------+---------------------|
+| A |      | {a,b,c} | {$}                 |
+| B | ✓    | ø       | FOLLOW(D) = {a,b,c} |
+| D | ✓    | {a.b}   | {a,b,c}             |
+|---+------+---------+---------------------|
+**** GUIDE
+|---------+---------------------------------|
+|         | GUIDE                           |
+|---------+---------------------------------|
+| A → DDc | FIRST(D) ∪ FOLLOW(A) = {a,b,$}  |
+| B → eps | FOLLOW(B) = FOLLOW(D) = {a,b,c} |
+| D → aB  | FIRST(a) = {a}                  |
+| D → b   | FIRST(b) = {b}                  |
+| D → eps | FOLLOW(D) = {a,b,c}             |
+|---------+---------------------------------|
+**** LL(1)?
 
-C → E | DCb
+D → aB  = FIRST(a)  = {a}
+D → b   = FIRST(b)  = {b}
+D → eps = FOLLOW(D) = {a,b,c}
+
+caratteristiche di un LL(1):
+***** [-] L → La stringa in input viene analizzata _da sinistra(LEFT) a destra_
+***** [-] L → Il parser cerca di costruire una _direvazione canonica sinistra_ (leftmost)
+***** [X] 1 → Il parser usa _un solo simbolo terminale_ della stringa per scegliere la produzione.
+
+_NON_ è un LL(1)
+
+** Data la seguente grammatica il cui simbolo iniziale è E. mostrare FIRST, FOLLOW di tutte le variabili e gli insiemi guida di tutte le produzioni. La grammatica è LL(1)?
+B → cdD
+C → b
+D → DbB | ϵ
+E → CdD
+*** Risposta
+**** NULL, FIRST, FOLLOW
+|---+------+-------+--------|
+|   | NULL | FIRST | FOLLOW |
+|---+------+-------+--------|
+| B |      | {c}   | {$,b}  |
+| C |      | {b}   | {d}    |
+| D | ✓    | {b}   | {$,b}  |
+| E |      | {b}   | {$}    |
+|---+------+-------+--------|
+**** GUIDE
+|---------+---------------------------|
+|         | GUIDE                     |
+|---------+---------------------------|
+| B → cdD | FIRST(C) = {c}            |
+| C → b   | FIRST(b) = {b}            |
+| D → DbB | FIRST(D) ∪ FIRST(b) = {b} |
+| D → ϵ    | FOLLOW(D) = {$,b}         |
+| E →CdD  | FIRST(C) ∪ FIRST(d) = {b} |
+|---------+---------------------------|
+
+** Data la seguente grammatica il cui simbolo iniziale è D. mostrare FIRST, FOLLOW di tutte le variabili e gli insiemi guida di tutte le produzioni. La grammatica è LL(1)?
+B → c | CBC
+C → ϵ | d
 D → E
-E → ϵ | aC
-
-individuare quale, tra le seguenti è una stringa generata da G.
-- [ ] b
-- [ ] aaa
-- [ ] aba
+E → Bd
 *** Risposta
-E → aC → aE → aaC → aaE → aaaC → aaaE → aaa
+**** NULL, FIRST & FOLLOW
+FIRST(B) = FIRST(c) ∪ FIRST(C) = {c,d}
+FIRST(C) = FIRST(d) = {d}
+FIRST(D) = FIRST(E) = FIRST(B) = {c,d}
+FIRST(E) = FIRST(B) = {c,d}
 
-- [X] b
-- [✓] aaa
-- [X] aba
+FOLLOW(B) = FIRST(d) = {d}
+FOLLOW(C) = FIRST(c) ∪ FIRST(B) = {c,d}
+FOLLOW(D) = {$}
+FOLLOW(E) = FOLLOW(D) = {$}
 
-** Le seguenti produzioni appartengono a una grammatica G avente simbolo iniziale D
-
-                               A → d | ϵ | BCA
-
-Quale tra le seguenti relazioni è _sicuramente_ vera senza conoscere l'intera grammatica
-- [ ] d ∈ FOLLOW(C)
-- [ ] FOLLOW(B) ⊂ FOLLOW(A)
-- [ ] FOLLOW(C) ⊂ FOLLOW(D)
-
-*** Risposta
-- _FOLLOW(B) ⊂ FOLLOW(A)_ non puo essere perche _FOLLOW(B) ⊂ FOLLOW(c)_
-- _FOLLOW(C) ⊂ FOLLOW(D)_ non puo essere perche non si trova D in questa produzione.
-quindi l'unica restante è _d ∈ FOLLOW(C)_ perche FOLLOW(C) = FIRST(A)= FIRST(d) = {d}
-
-- [✓] d ∈ FOLLOW(C)
-- [X] FOLLOW(B) ⊂ FOLLOW(A)
-- [X] FOLLOW(C) ⊂ FOLLOW(D)
+|---+------+-------+--------|
+|   | NULl | FIRST | FOLLOW |
+|---+------+-------+--------|
+| B |      | {c,d} | {d}    |
+| C | ✓    | {d}   | {c,d}  |
+| D |      | {c,d} | {$}    |
+| E |      | {c,d} | {$}    |
+|---+------+-------+--------|
+**** GUIDE
+GUIDE(B → c)   = FIRST(c)            = {c}
+GUIDE(B → CBC) = FIRST(C) ∪ FIRST(B) = {c,d}
+GUIDE(C → ϵ)   = FOLLOW(C)           = {c,d}
+GUIDE(C → d)   = FIRST(d)            = {d}
+GUIDE(D → E)   = FIRST(E)            = {c,d}
+GUIDE(E → )
+|---------+-------|
+| sets    | GUIDE |
+|---------+-------|
+| B → c   | {c}   |
+| B → CBC |       |
+| C → ϵ    |       |
+| C → d   |       |
+| D → E   |       |
+| E → Bd  |       |
+|---------+-------|
 
 * Attributi
 ** Le seguente produzione con asscoate _regole semantiche_ in cui gli Sᵢ (se presenti) sonon attributi _sintetizzati_ e gli eᵢ (se presenti) sono attributi _ereditati_, appartiene a una SDD
@@ -1003,6 +1162,20 @@ puo essere L-attribuita perche l'unico atributo che non deriva della A, è
 la  _D.e1 = B.s1_ ma non è un problema perche la B è a sinistra della D.
 
 E non puo essere un S-attribuito perche c'è _D.e₁_ che sarebbe eredità.
+
+- [✓] che puo essere L-attribuita ma non S-attribuita
+- [X] che puo essere S-attribuita
+- [X] che non è L-attribuita
+
+** Le seguente produzione con asscoate _regole semantiche_ in cui gli Sᵢ (se presenti) sonon attributi _sintetizzati_ e gli eᵢ (se presenti) sono attributi _ereditati_, appartiene a una SDD
+
+                   A → BCD {A.s₁=D.s₂, A.s₁=D.s₀, A.e₀ = C.e₂, C.e₃ = A.e₂}
+
+- [ ] che puo essere L-attribuita ma non S-attribuita
+- [ ] che puo essere S-attribuita
+- [ ] che non è L-attribuita
+*** Risposta
+Non puo essere S-attribuita perche contiene A.e₁
 
 - [✓] che puo essere L-attribuita ma non S-attribuita
 - [X] che puo essere S-attribuita
@@ -1181,6 +1354,21 @@ isum
 | z + 10/7 +6 |
 |-------------|
 
+** Determinare il massimo di operandi contemporaneamente presenti sulla piladurante la valutazione della seguente espressione
+x - (3 - (8 - x))
+*** Risposta
+qua per rompere tutti i parenetesi. quindi si devono aggiungere tutti i numeri prima di inserire tutte le operazioni
+#+begin_src c
+iload x
+ldc 3
+ldc 8
+iload x
+#+end_src
+| x |
+| 8 |
+| 3 |
+| x |
+|---|
 * traduzione inversa
 ** Qual è il comando che viene tradotto nel codice seguente
 #+begin_src c
@@ -1270,7 +1458,6 @@ if(x<y){
 
 * Schemi di traduzione
 ** Definire uno schema di traduzione _(SDT)_ e il codice¹ Java del parser ricorsivo dicsendente che riconosce il linguaggio delle stringue della forma _aᵏbc²ᵏ_ e che calcola il numero totale di simboli presenti
-
 *** SDD
 S → A
 A → aAcc | b
@@ -1309,3 +1496,4 @@ private int A(int i){
     return val;
 }
 #+end_src
+
