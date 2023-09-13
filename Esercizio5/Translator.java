@@ -179,7 +179,7 @@ public class Translator { // Un Parser32 adattato.
 			code.emit(OpCode.istore,address);
 			match(Tag.ID);
 
-			if (look.tag == ',' && look.tag == Tag.ASSIGN) {
+			if (look.tag == ',' && op == Tag.ASSIGN) {
 				code.emit(OpCode.iload,address);
 			}
 		}else{
