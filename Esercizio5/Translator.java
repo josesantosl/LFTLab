@@ -37,7 +37,7 @@ public class Translator { // Un Parser32 adattato.
     private void prog(){//prog() -> statlist(lnext) EOF
 
 		switch(look.tag){
-		//GUIDA(statlist):
+		//GUIDA(prog):
 		case Tag.ASSIGN:
 		case Tag.PRINT:
 		case Tag.READ:
@@ -56,6 +56,8 @@ public class Translator { // Un Parser32 adattato.
 			}catch(java.io.IOException e) {
 				System.err.println("Error writting the Output.j");
 			}
+			break;
+		case Tag.EOF:
 			break;
 		default:
 			error("Incorrect prog start");
