@@ -45,7 +45,7 @@ public class Translator { // Un Parser32 adattato.
 		case Tag.COND:
 		case '{':
 			int proglabel = code.newLabel();
-			statlist(proglabel);
+			statlist();
 			match(Tag.EOF);
 
 			code.emit(OpCode.GOto,proglabel);
@@ -65,7 +65,7 @@ public class Translator { // Un Parser32 adattato.
 
     }
 
-    private void statlist(int labelAttuale){
+    private void statlist(){
 		switch(look.tag){
 		//GUIDA(statlist) = {'assign','print','read','while','condition','{',$}
 		case Tag.ASSIGN:
@@ -74,11 +74,11 @@ public class Translator { // Un Parser32 adattato.
 		case Tag.WHILE:
 		case Tag.COND:
 		case '{':
-			stat(labelAttuale);
+			stat();
 			int lnext = code.newLabel();
 			code.emit(OpCode.GOto,lnext);
 			code.emitLabel(lnext);
-			statlistp(lnext);
+			statlistp();
 			break;
 		case Tag.EOF:
 			break;
@@ -87,12 +87,12 @@ public class Translator { // Un Parser32 adattato.
 		}
     }
 
-    private void statlistp(int labelAttuale){
+    private void statlistp(){
 		//FOLLOW(Statlist) = {';','}','$'}
 		switch(look.tag){
 		case ';':
 			match(';');
-			statlist(labelAttuale);
+			statlist();
 			break;
 		case '}':
 		case Tag.EOF:
@@ -103,7 +103,7 @@ public class Translator { // Un Parser32 adattato.
 		}
     }
 
-    private void stat(int labelAttuale){
+    private void stat(){
 		//GUIDA(stat) = {'assign','print','read','while','condition','{'}
 		switch (look.tag) {
 		case Tag.ASSIGN:
@@ -132,7 +132,7 @@ public class Translator { // Un Parser32 adattato.
 			match('(');
 			negbexpr(endwhile);
 			match(')');
-			stat(labelAttuale);
+			stat();
 			code.emit(OpCode.GOto,startloop);
 			code.emitLabel(endwhile);
 			break;
@@ -145,7 +145,7 @@ public class Translator { // Un Parser32 adattato.
 			switch (look.tag) {
 			case Tag.ELSE:
 				match(Tag.ELSE);
-				stat(labelAttuale);
+				stat();
 			case Tag.END:
 				match(Tag.END);
 				code.emitLabel(lendCondition);
@@ -156,7 +156,7 @@ public class Translator { // Un Parser32 adattato.
 			break;
 		case '{':
 			match('{');
-			statlist(labelAttuale);
+			statlist();
 			match('}');
 			break;
 		default:
@@ -243,7 +243,7 @@ public class Translator { // Un Parser32 adattato.
 		code.emit(OpCode.GOto,lnext);
 		code.emitLabel(ltrue);
 		match(Tag.DO);
-		stat(lnext);
+		stat();
 		code.emit(OpCode.GOto,lendCondition);
 		code.emitLabel(lnext);
     }
