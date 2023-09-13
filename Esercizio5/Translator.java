@@ -166,7 +166,13 @@ public class Translator { // Un Parser32 adattato.
 			if (address == -1) {
 				st.insert(((Word)look).lexeme,count);
 				address = count++;
+				match(Tag.ID);
 			}
+			if (look.tag == ',') {
+				code.emit(OpCode.iload,address);
+			}
+		}else{
+			error("is not a identifier.");
 		}
 
 		//FOLLOW(idlist) = {',ID',';',']','$'}
@@ -178,13 +184,12 @@ public class Translator { // Un Parser32 adattato.
 		switch(look.tag){
 		case ',':
 			match(',');
-			code.emit(OpCode.iload,address);
-			idlist();
+			idlist(op);
 			break;
 		case ']':
 		case ';':
-		case Tag.EOF;
-		break;
+		case Tag.EOF:
+			break;
 		default:
 			error("no identifier was found.");
 		}
@@ -201,14 +206,14 @@ public class Translator { // Un Parser32 adattato.
 		}
 
 		//FOLLOW(optlist)
-		optilistp(lendCondition);
+		optlistp(lendCondition);
     }
 
 	private void optlistp(int lendCondition){
 		//FOLLOW(optlist) = {'option',']'}
 		switch(look.tag){
 		case Tag.OPTION:
-			optilist(lendCondition);
+			optlist(lendCondition);
 			break;
 		case ']':
 			break;
@@ -367,7 +372,7 @@ public class Translator { // Un Parser32 adattato.
 		case ']':
 			break;
 		default:
-			error("Error inside the expression list.")
+			error("Error inside the expression list.");
 		}
     }
 
