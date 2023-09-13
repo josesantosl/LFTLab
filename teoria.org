@@ -139,7 +139,8 @@ quindi  usando le tabelle di prima
 
   - L → La stringa in input viene analizzata _da sinistra(LEFT) a destra_
   - L → Il parser cerca di costruire una _direvazione canonica sinistra_ (leftmost)
-  - 1 → Il parser usa _un solo simbolo terminale_ della stringa per scegliere la produzione.
+  - 1 → Il parser usa _un solo simbolo terminale_ della stringa per scegliere la produzione
+.
 
 * Automi a pila
 ** Il problema si lege cosi

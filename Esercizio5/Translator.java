@@ -36,42 +36,72 @@ public class Translator { // Un Parser32 adattato.
 
     private void prog(){//prog() -> statlist(lnext) EOF
 
-		if (look.tag == Tag.EOF) {
-			error("file vuoto");
+		switch(look.tag){
+		//GUIDA(statlist):
+		case Tag.ASSIGN:
+		case Tag.PRINT:
+		case Tag.READ:
+		case Tag.WHILE:
+		case Tag.COND:
+		case '{':
+			int proglabel = code.newLabel();
+			statlist(proglabel);
+			match(Tag.EOF);
+
+			code.emit(OpCode.GOto,proglabel);
+			code.emitLabel(proglabel);
+
+			try {
+				code.toJasmin();
+			}catch(java.io.IOException e) {
+				System.err.println("Error writting the Output.j");
+			}
+			break;
+		default:
+			error("Incorrect prog start");
 		}
 
-		int proglabel = code.newLabel();
-		statlist(proglabel);
-		match(Tag.EOF);
-
-		code.emit(OpCode.GOto,proglabel);
-		code.emitLabel(proglabel);
-
-
-        try {
-			code.toJasmin();
-        }catch(java.io.IOException e) {
-			System.err.println("Error writting the Output.j");
-		}
-	
     }
 
     private void statlist(int labelAttuale){
-		stat(labelAttuale);
-		int lnext = code.newLabel();
-		code.emit(OpCode.GOto,lnext);
-		code.emitLabel(lnext);
-		statlistp(lnext);
+		switch(look.tag){
+		//GUIDA(statlist) = {'assign','print','read','while','condition','{',$}
+		case Tag.ASSIGN:
+		case Tag.PRINT:
+		case Tag.READ:
+		case Tag.WHILE:
+		case Tag.COND:
+		case '{':
+			stat(labelAttuale);
+			int lnext = code.newLabel();
+			code.emit(OpCode.GOto,lnext);
+			code.emitLabel(lnext);
+			statlistp(lnext);
+			break;
+		case Tag.EOF:
+			break;
+		default:
+			error("unexpected stat inside the statlist.");
+		}
     }
 
     private void statlistp(int labelAttuale){
-		if(look.tag == ';'){
+		//FOLLOW(Statlist) = {';','}','$'}
+		switch(look.tag){
+		case ';':
 			match(';');
 			statlist(labelAttuale);
+			break;
+		case '}':
+		case Tag.EOF:
+			break;
+		default:
+			error("unexpected stat inside the statlist.");
 		}
     }
 
     private void stat(int labelAttuale){
+		//GUIDA(stat) = {'assign','print','read','while','condition','{'}
 		switch (look.tag) {
 		case Tag.ASSIGN:
 			match(Tag.ASSIGN);
@@ -116,7 +146,7 @@ public class Translator { // Un Parser32 adattato.
 				code.emitLabel(lendCondition);
 				break;
 			default:
-				error("not valid command");
+				error("unclosed OPTION");
 			}
 			break;
 		case '{':
@@ -128,45 +158,62 @@ public class Translator { // Un Parser32 adattato.
 			error("not valid stat");
 		}
     }
+
     private void idlist(int op){
+		//Register the identifiers not yet registered in the Symbol Table.
 		if(look.tag == Tag.ID){
 			int address = st.lookupAddress(look);
 			if (address == -1) {
 				st.insert(((Word)look).lexeme,count);
 				address = count++;
 			}
+		}
 
-			code.emit(OpCode.istore,address);
-			match(Tag.ID);
+		//FOLLOW(idlist) = {',ID',';',']','$'}
+		idlistp(op);
+    }
 
-			//if there is another ",ID" we add the number again with iload
-			if (look.tag == ',') {
-				code.emit(OpCode.iload,address);
-				idlistp(op);
-			}
-		}else{
+    private void idlistp(int op){
+		//FOLLOW(idlist) = {',ID',';',']','$'}
+		switch(look.tag){
+		case ',':
+			match(',');
+			code.emit(OpCode.iload,address);
+			idlist();
+			break;
+		case ']':
+		case ';':
+		case Tag.EOF;
+		break;
+		default:
 			error("no identifier was found.");
 		}
     }
 
-    private void idlistp(int op){
-		if(look.tag == ','){
-			match(',');
-			idlist(op);
-		}
-    }
-
     private void optlist(int lendCondition){
-		int lnext = code.newLabel();
-		optitem(lnext,lendCondition);
-		optlistp(lendCondition);
-    }
-
-	private void optlistp(int lendCondition){
-		if(look.tag == Tag.OPTION){
+		//GUIDA(optilist) = {'option',']'}
+		if(look.tag==Tag.OPTION){
 			int lnext = code.newLabel();
 			optitem(lnext,lendCondition);
 			optlistp(lendCondition);
+		}else{
+			error("unexpected OPTION inside option list.");
+		}
+
+		//FOLLOW(optlist)
+		optilistp(lendCondition);
+    }
+
+	private void optlistp(int lendCondition){
+		//FOLLOW(optlist) = {'option',']'}
+		switch(look.tag){
+		case Tag.OPTION:
+			optilist(lendCondition);
+			break;
+		case ']':
+			break;
+		default:
+			error("unexpected OPTION inside option list.");
 		}
     }
 
@@ -231,7 +278,7 @@ public class Translator { // Un Parser32 adattato.
 			code.emit(OpCode.ior, truelabel);
 			break;
 		default:
-			error("is not a relational operator");
+			error("Is not a relational operator");
 		}
     }
 
@@ -264,8 +311,8 @@ public class Translator { // Un Parser32 adattato.
 			break;
 		case Tag.NUM:
 			/*devo fare il cast a NumberTok perche java non sa che il look e'
-	     *un NumberTok e non un semplice Token.
-	    */
+			 *un NumberTok e non un semplice Token.
+			 */
 			int num = ((NumberTok)look).num; //(numberTok)look dice al look di comportarsi come NumberTok
 			code.emit(OpCode.ldc,num);
 			match(Tag.NUM);
@@ -290,14 +337,16 @@ public class Translator { // Un Parser32 adattato.
 		expr();
 		if(op == Tag.PRINT){
 			/*invokestatic 1 significa print, altrimente sarebbe READ(non e'
-	    specificato nel progetto ma possiamo dire che sarebbe 0 in quel caso)*/
+			  specificato nel progetto ma possiamo dire che sarebbe 0 in quel caso)*/
 			code.emit(OpCode.invokestatic,1);//nel caso del print dobbiamo usarlo per ogni espressione perche e' un'operazione unitaria e non binaria
 		}
+		//FOLLOW(exprlist)
 		exprlistp(op);
     }
 
     private void exprlistp(int op){
-		if(look.tag == ','){
+		switch(look.tag){
+		case ',':
 			match(',');
 			expr();
 			switch (op) {
@@ -314,6 +363,11 @@ public class Translator { // Un Parser32 adattato.
 				error("invalid Operator");
 			}
 			exprlistp(op);
+		case ')':
+		case ']':
+			break;
+		default:
+			error("Error inside the expression list.")
 		}
     }
 
