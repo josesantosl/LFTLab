@@ -107,7 +107,7 @@ public class Translator { // Un Parser32 adattato.
 			match(Tag.ASSIGN);
 			expr();
 			match(Tag.TO);
-			idlist(Tag.ASSIGN);
+			idlist();
 			break;
 		case Tag.PRINT:
 			match(Tag.PRINT);
@@ -118,14 +118,16 @@ public class Translator { // Un Parser32 adattato.
 		case Tag.READ:
 			match(Tag.READ);
 			match('[');
-			idlist(Tag.READ);
+			code.emit(OpCode.invokestatic,0);//invokestatic READ
+			idlist();
 			match(']');
 			break;
-		case Tag.WHILE:
+		case Tag.WHILE: // da modificare a due label
 			match(Tag.WHILE);
+			int startwhile = code.newLabel();
 			int endwhile   = code.newLabel();
 			match('(');
-			bexpr(endwhile);
+			bexpr(startwhile);
 			match(')');
 			stat(labelAttuale);
 			code.emit(OpCode.GOto,labelAttuale);
@@ -159,7 +161,7 @@ public class Translator { // Un Parser32 adattato.
 		}
     }
 
-    private void idlist(int op){
+    private void idlist(){
 		//Register the identifiers not yet registered in the Symbol Table.
 		if(look.tag == Tag.ID){
 			int address = st.lookupAddress(look);
@@ -177,15 +179,15 @@ public class Translator { // Un Parser32 adattato.
 		}
 
 		//FOLLOW(idlist) = {',ID',';',']','$'}
-		idlistp(op);
+		idlistp();
     }
 
-    private void idlistp(int op){
+    private void idlistp(){
 		//FOLLOW(idlist) = {',ID',';',']','$'}
 		switch(look.tag){
 		case ',':
 			match(',');
-			idlist(op);
+			idlist();
 			break;
 		case ']':
 		case ';':
