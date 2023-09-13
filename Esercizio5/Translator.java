@@ -94,6 +94,7 @@ public class Translator { // Un Parser32 adattato.
 			break;
 		case '}':
 		case Tag.EOF:
+		case Tag.END:
 			break;
 		default:
 			error("unexpected stat inside the statlist.");
@@ -124,11 +125,13 @@ public class Translator { // Un Parser32 adattato.
 			break;
 		case Tag.WHILE: // da modificare a due label
 			match(Tag.WHILE);
-			int startwhile = code.newLabel();
+			int startloop = code.newLabel();
 			int endwhile   = code.newLabel();
 			match('(');
-			bexpr(startwhile);
+			bexpr(startloop);
 			match(')');
+			code.emit(OpCode.GOto,endwhile);
+			code.emitLabel(startloop);
 			stat(labelAttuale);
 			code.emit(OpCode.GOto,labelAttuale);
 			code.emitLabel(endwhile);
@@ -168,9 +171,9 @@ public class Translator { // Un Parser32 adattato.
 			if (address == -1) {
 				st.insert(((Word)look).lexeme,count);
 				address = count++;
-				code.emit(OpCode.istore,address);
-				match(Tag.ID);
 			}
+			code.emit(OpCode.istore,address);
+			match(Tag.ID);
 			if (look.tag == ',') {
 				code.emit(OpCode.iload,address);
 			}
@@ -178,23 +181,24 @@ public class Translator { // Un Parser32 adattato.
 			error("is not a identifier.");
 		}
 
-		//FOLLOW(idlist) = {',ID',';',']','$'}
+		//FOLLOW(idlist) = {',ID',';',']','}','$'}
 		idlistp();
     }
 
     private void idlistp(){
-		//FOLLOW(idlist) = {',ID',';',']','$'}
+		//FOLLOW(idlist) = {',ID',';',']','}','$'}
 		switch(look.tag){
 		case ',':
 			match(',');
 			idlist();
 			break;
 		case ']':
+		case '}':
 		case ';':
 		case Tag.EOF:
 			break;
 		default:
-			error("no identifier was found.");
+			error("no identifier was found P .");
 		}
     }
 
