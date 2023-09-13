@@ -173,11 +173,13 @@ public class Translator { // Un Parser32 adattato.
 				st.insert(((Word)look).lexeme,count);
 				address = count++;
 			}
-			code.emit(OpCode.istore,address);
-			match(Tag.ID);
 			if (op == Tag.READ) {
 				code.emit(OpCode.invokestatic,0);//invokestatic READ
 			}
+
+			code.emit(OpCode.istore,address);
+			match(Tag.ID);
+
 			if (look.tag == ',' && look.tag == Tag.ASSIGN) {
 				code.emit(OpCode.iload,address);
 			}
