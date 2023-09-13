@@ -27,86 +27,86 @@ public class Es14 {
      |---------------------------------|
      */
     public static boolean scan(String s){
-	int state = 0;
-	int i = 0;
-	while (state >=0 && i < s.length()) {
-	    final char ch = s.charAt(i++);
+		int state = 0;
+		int i = 0;
+		while (state >=0 && i < s.length()) {
+			final char ch = s.charAt(i++);
 	    final int numchar = Character.getNumericValue(ch); //numericValue Char
 	    switch (state) {
 
 	    case 0:
-		//stato iniziale
-		if( ch == ' ')
-		    state = 0;
-		else if(Character.isLetter(ch))
-		    state = -1;
-		else if( numchar%2 != 0)
-		    state = 1;
-		else if( numchar%2 == 0)
-		    state = 2;
-		break;
+			//stato iniziale
+			if( ch == ' ')
+				state = 0;
+			else if(Character.isLetter(ch))
+				state = -1;
+			else if( numchar%2 != 0)
+				state = 1;
+			else if( numchar%2 == 0)
+				state = 2;
+			break;
 
 
 	    case 1:
-		//stato dispari
-		if( ch == ' ')
-		    state = 3;
+			//stato dispari
+			if( ch == ' ')
+				state = 3;
 		else if(Character.isDigit(ch)){
 		    if( numchar%2 != 0)
-			state = 1;
+				state = 1;
 		    else
-			state = 2;
+				state = 2;
 		}else
 		    state = -1;
-		break;
+			break;
 
 
 	    case 2:
-		//stato pari
-		if(ch == ' ')
-		    state = 4;
-		else if(Character.isDigit(ch)){
-		    if( numchar%2 != 0){
-			state = 1;
-		    }else{
-			state = 2;
-		    }
-		}else
-		    state = -1;
-		break;
+			//stato pari
+			if(ch == ' ')
+				state = 4;
+			else if(Character.isDigit(ch)){
+				if( numchar%2 != 0){
+					state = 1;
+				}else{
+					state = 2;
+				}
+			}else
+				state = -1;
+			break;
 
-	       
+
 	    case 3:
-		//stato spazio dispari
-		if( ch == ' ')
-		    state = 3;
-		else if( ch >= 'L' && ch <= 'Z')
-		    state = 5;
-		else
-		    state = -1;
-		break;
+			//stato spazio dispari
+			if( ch == ' ')
+				state = 3;
+			else if( ch >= 'L' && ch <= 'Z')
+				state = 5;
+			else
+				state = -1;
+			break;
 
 	    case 4:
-		//stato spazio pari
-		if( ch == ' ')
-		    state = 4;
-		else if( ch >= 'A' && ch <= 'K')
-		    state = 5;
-		else
-		    state = -1;
-		break;
+			//stato spazio pari
+			if( ch == ' ')
+				state = 4;
+			else if( ch >= 'A' && ch <= 'K')
+				state = 5;
+			else
+				state = -1;
+			break;
 	    case 5:
-		//stato aprovato
-		if( Character.isLetter(ch) || ch==' ' )
-		    state = 5;
-		else 
-		    state = -1;
+			//stato aprovato
+			if( Character.isLetter(ch) || ch==' ' )
+				state = 5;
+			else
+				state = -1;
 	    }
 
-	}
-	return state==5;
+		}
+		return state==5;
     }
     public static void main(String[] args) {
-	System.out.println(scan(args[0]) ? "OK":"NOPE");
+		System.out.println(scan(args[0]) ? "OK":"NOPE");
     }
 }
