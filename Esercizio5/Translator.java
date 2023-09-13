@@ -166,6 +166,7 @@ public class Translator { // Un Parser32 adattato.
 			if (address == -1) {
 				st.insert(((Word)look).lexeme,count);
 				address = count++;
+				code.emit(OpCode.istore,address);
 				match(Tag.ID);
 			}
 			if (look.tag == ',') {
