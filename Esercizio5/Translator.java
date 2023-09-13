@@ -128,13 +128,12 @@ public class Translator { // Un Parser32 adattato.
 			match(Tag.WHILE);
 			int startloop = code.newLabel();
 			int endwhile   = code.newLabel();
-			match('(');
-			bexpr(startloop);
-			match(')');
-			code.emit(OpCode.GOto,endwhile);
 			code.emitLabel(startloop);
+			match('(');
+			negbexpr(endwhile);
+			match(')');
 			stat(labelAttuale);
-			code.emit(OpCode.GOto,labelAttuale);
+			code.emit(OpCode.GOto,startloop);
 			code.emitLabel(endwhile);
 			break;
 		case Tag.COND:
@@ -280,8 +279,7 @@ public class Translator { // Un Parser32 adattato.
 			break;
 		case '!':
 			match('!');
-			//bexpr();
-			code.emit(OpCode.ineg, truelabel);
+			negbexpr(truelabel);
 			break;
 		case Tag.AND:
 			match(Tag.AND);
