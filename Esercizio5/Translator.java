@@ -165,7 +165,7 @@ public class Translator { // Un Parser32 adattato.
     }
 
     private void idlist(int op){
-		//Register the identifiers not yet registered in the Symbol Table.
+		//Registra le identificatori che ancora non sono registrati al SymbolTable.
 		if(look.tag == Tag.ID){
 			int address = st.lookupAddress(look);
 			if (address == -1) {
@@ -203,7 +203,7 @@ public class Translator { // Un Parser32 adattato.
 		case Tag.EOF:
 			break;
 		default:
-			error("no identifier was found P .");
+			error("no identifier was found.");
 		}
     }
 
