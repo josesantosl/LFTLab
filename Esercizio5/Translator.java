@@ -300,6 +300,33 @@ public class Translator { // Un Parser32 adattato.
 		}
     }
 
+    private void negbexpr(int truelabel){
+		String relatinaloperator = ((Word)look).lexeme;
+		match(Tag.RELOP);
+		expr();
+		expr();
+		switch (relatinaloperator) {
+		case ">":
+			code.emit(OpCode.if_icmple,truelabel);
+			break;
+		case "<":
+			code.emit(OpCode.if_icmpge,truelabel);
+			break;
+		case "<=":
+			code.emit(OpCode.if_icmpgt,truelabel);
+			break;
+		case ">=":
+			code.emit(OpCode.if_icmplt,truelabel);
+			break;
+		case "==":
+			code.emit(OpCode.if_icmpne,truelabel);
+			break;
+		case "<>":
+			code.emit(OpCode.if_icmpeq,truelabel);
+			break;
+		}
+	}
+
     private void expr(){
 		switch (look.tag) {
 		case '+':
