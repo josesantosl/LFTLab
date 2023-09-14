@@ -1,4 +1,4 @@
-public class indentificatore {
+public class Es12 {
     /*
       CONDIZIONI IDENTIFICATORE:
       - non comincia con un numero 
