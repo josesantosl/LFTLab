@@ -65,8 +65,8 @@ public class Translator { // Un Parser32 adattato.
     }
 
     private void statlist(){
+		//GUIDA(<statlist> -> <stat><statlistp>) = assign, print, read, while, conditional, {
 		switch(look.tag){
-		//GUIDA(statlist) = {'assign','print','read','while','condition','{',$}
 		case Tag.ASSIGN:
 		case Tag.PRINT:
 		case Tag.READ:
@@ -87,7 +87,8 @@ public class Translator { // Un Parser32 adattato.
     }
 
     private void statlistp(){
-		//FOLLOW(Statlist) = {';','}','$'}
+		//GUIDA(<statlistp> -> ;<stat><statlistp>) = ;
+		//GUIDA(<statlistp> -> eps) = EOF, }
 		switch(look.tag){
 		case ';':
 			match(';');
@@ -102,28 +103,27 @@ public class Translator { // Un Parser32 adattato.
     }
 
     private void stat(){
-		//GUIDA(stat) = {'assign','print','read','while','condition','{'}
 		switch (look.tag) {
-		case Tag.ASSIGN:
+		case Tag.ASSIGN: // GUIDA(<stat> -> assign<expr>to<idlist>) = assign
 			match(Tag.ASSIGN);
 			expr();
 			match(Tag.TO);
 			idlist(Tag.ASSIGN);
 			break;
-		case Tag.PRINT:
+		case Tag.PRINT: // GUIDA(<stat> -> print[<exprlist>]) = print
 			match(Tag.PRINT);
 			match('[');
 			exprlist(Tag.PRINT);
 			match(']');
 			break;
-		case Tag.READ:
+		case Tag.READ: // GUIDA(<stat> -> read[<idlist>]) = read
 			match(Tag.READ);
 			match('[');
 			idlist(Tag.READ);
 			match(']');
 			break;
 		case Tag.WHILE:
-			match(Tag.WHILE);
+			match(Tag.WHILE); // GUIDA(<stat> -> while(<bexpr>)<stat>) = while
 			int startloop  = code.newLabel();
 			int endwhile   = code.newLabel();
 			code.emitLabel(startloop);
@@ -134,14 +134,14 @@ public class Translator { // Un Parser32 adattato.
 			code.emit(OpCode.GOto,startloop);
 			code.emitLabel(endwhile);
 			break;
-		case Tag.COND:
+		case Tag.COND: // GUIDA(<stat> -> conditional[<optlist>]end) = conditional
 			int lendCondition = code.newLabel();
 			match(Tag.COND);
 			match('[');
 			optlist(lendCondition);
 			match(']');
 			switch (look.tag) {
-			case Tag.ELSE:
+			case Tag.ELSE: // GUIDA(<stat> -> conditional[<optlist>]else<stat>end) = conditional
 				match(Tag.ELSE);
 				stat();
 			case Tag.END:
@@ -152,7 +152,7 @@ public class Translator { // Un Parser32 adattato.
 				error("unclosed OPTION");
 			}
 			break;
-		case '{':
+		case '{': // GUIDA(<stat> -> {<statlist>}) = {
 			match('{');
 			statlist();
 			match('}');
@@ -163,6 +163,7 @@ public class Translator { // Un Parser32 adattato.
     }
 
     private void idlist(int op){
+		// GUIDA(<idlist> -> ID<idlistp>) = ID
 		//Registra le identificatori che ancora non sono registrati al SymbolTable.
 		if(look.tag == Tag.ID){
 			int address = st.lookupAddress(look);
@@ -189,6 +190,8 @@ public class Translator { // Un Parser32 adattato.
     }
 
     private void idlistp(int op){
+		// GUIDA(<idlistp> -> ,ID<idlistp>) = ,
+		// GUIDA(<idlistp> -> eps) = ], ;, }, end, option, EOF
 		//FOLLOW(idlist) = {',ID',';',']','}','$'}
 		switch(look.tag){
 		case ',':
@@ -206,7 +209,7 @@ public class Translator { // Un Parser32 adattato.
     }
 
     private void optlist(int lendCondition){
-		//GUIDA(optilist) = {'option',']'}
+		// GUIDA(<optilist> -> <optitem><optlistp>) = option
 		if(look.tag==Tag.OPTION){
 			int lnext = code.newLabel();
 			optitem(lnext,lendCondition);
@@ -217,6 +220,8 @@ public class Translator { // Un Parser32 adattato.
     }
 
 	private void optlistp(int lendCondition){
+		// GUIDA(<optlist> -> <optitem><optlistp>) = option
+		// GUIDA(<optlist> -> eps) = ]
 		//FOLLOW(optlist) = {'option',']'}
 		switch(look.tag){
 		case Tag.OPTION:
@@ -230,6 +235,7 @@ public class Translator { // Un Parser32 adattato.
     }
 
     private void optitem(int lnext, int lendCondition){
+		// GUIDA(<optitem> -> option(<bexpr>)do<stat>) = option
 		int ltrue = code.newLabel();
 		match(Tag.OPTION);
 		match('(');
@@ -244,6 +250,7 @@ public class Translator { // Un Parser32 adattato.
     }
 
     private void bexpr(int truelabel){
+		// GUIDA(<bexpr> -> RELOP<expr><expr>) = RELOP
 		int lFalse; //per i casi dove dobbiamo controllare sia vero o falso (AND e OR)
 		switch (look.tag) {
 		case Tag.RELOP:
@@ -336,26 +343,26 @@ public class Translator { // Un Parser32 adattato.
 
     private void expr(){
 		switch (look.tag) {
-		case '+':
+		case '+': // GUIDA(<expr> -> +(<exprlist>)) = +
 			match('+');
 			match('(');
 			exprlist('+');
 			match(')');
 			break;
 
-		case '*':
+		case '*': // GUIDA(<expr> -> *(<exprlist>)) = *
 			match('*');
 			match('(');
 			exprlist('*');
 			match(')');
 			break;
-		case '-':
+		case '-': // GUIDA(<expr> -> -<expr><expr>) = -
 			match('-');
 			expr();
 			expr();
 			code.emit(OpCode.isub);
 			break;
-		case '/':
+		case '/': // GUIDA(<expr> -> /<expr><expr>) = /
 			match('/');
 			expr();
 			expr();
@@ -386,6 +393,7 @@ public class Translator { // Un Parser32 adattato.
     }
 
     private void exprlist(int op){
+		// GUIDA(<exprlist> -> <expr><exprlistp>) = +,-,*,/, NUM, ID
 		expr();
 		if(op == Tag.PRINT){
 			/*invokestatic 1 significa print, altrimente sarebbe READ(non e'
@@ -397,6 +405,8 @@ public class Translator { // Un Parser32 adattato.
     }
 
     private void exprlistp(int op){
+		// GUIDA(<exprlistp> -> ,<expr><exprlistp>) = ,
+		// GUIDA(<exprlistp> -> eps) = ),]
 		switch(look.tag){
 		case ',':
 			match(',');
