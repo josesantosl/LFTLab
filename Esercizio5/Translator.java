@@ -211,7 +211,6 @@ public class Translator { // Un Parser32 adattato.
 		if(look.tag==Tag.OPTION){
 			int lnext = code.newLabel();
 			optitem(lnext,lendCondition);
-			optlistp(lendCondition);
 		}else{
 			error("unexpected OPTION inside option list.");
 		}
