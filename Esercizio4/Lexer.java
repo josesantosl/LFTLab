@@ -15,7 +15,7 @@ public class Lexer {
     }
 
     public Token lexical_scan(BufferedReader br) {
-        while (peek == ' ' || peek == '\t' || peek == '\n'  || peek == '\r') {
+        while (peek == ' ' || peek == '\t' || peek == '\n'  || peek == '\r') { //'t'=TAP, 'n'=salto di riga, 'r'=carrige return
             if (peek == '\n'){//salto di linea
                 line++;
             }
