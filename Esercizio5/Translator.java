@@ -124,13 +124,13 @@ public class Translator { // Un Parser32 adattato.
 			idlist(Tag.READ);
 			match(']');
 			break;
-		case Tag.WHILE: // da modificare a due label
+		case Tag.WHILE:
 			match(Tag.WHILE);
-			int startloop = code.newLabel();
+			int startloop  = code.newLabel();
 			int endwhile   = code.newLabel();
 			code.emitLabel(startloop);
 			match('(');
-			negbexpr(endwhile);
+			negbexpr(endwhile); // ! bexpr
 			match(')');
 			stat();
 			code.emit(OpCode.GOto,startloop);
@@ -249,7 +249,7 @@ public class Translator { // Un Parser32 adattato.
     }
 
     private void bexpr(int truelabel){
-		int lFalse;
+		int lFalse; //per i casi dove dobbiamo controllare sia vero o falso (AND e OR)
 		switch (look.tag) {
 		case Tag.RELOP:
 			String relatinaloperator = ((Word)look).lexeme;
@@ -278,7 +278,9 @@ public class Translator { // Un Parser32 adattato.
 			}
 
 			break;
-		case '!':
+
+		//Facoltativo 5.2
+		case '!': // ! true = false // ! false = true
 			match('!');
 			negbexpr(truelabel);
 			break;
@@ -317,22 +319,22 @@ public class Translator { // Un Parser32 adattato.
 		expr();
 		switch (relatinaloperator) {
 		case ">":
-			code.emit(OpCode.if_icmple,truelabel);
+			code.emit(OpCode.if_icmple,truelabel);// <=
 			break;
 		case "<":
-			code.emit(OpCode.if_icmpge,truelabel);
+			code.emit(OpCode.if_icmpge,truelabel);// >=
 			break;
 		case "<=":
-			code.emit(OpCode.if_icmpgt,truelabel);
+			code.emit(OpCode.if_icmpgt,truelabel);// >
 			break;
 		case ">=":
-			code.emit(OpCode.if_icmplt,truelabel);
+			code.emit(OpCode.if_icmplt,truelabel);// <
 			break;
 		case "==":
-			code.emit(OpCode.if_icmpne,truelabel);
+			code.emit(OpCode.if_icmpne,truelabel);// <>
 			break;
 		case "<>":
-			code.emit(OpCode.if_icmpeq,truelabel);
+			code.emit(OpCode.if_icmpeq,truelabel);// ==
 			break;
 		}
 	}
