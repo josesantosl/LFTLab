@@ -34,10 +34,9 @@ public class Translator { // Un Parser32 adattato.
 		} else error("syntax error");
     }
 
-    private void prog(){//prog() -> statlist(lnext) EOF
-
+    private void prog(){
+		// GUIDA(<prog> -> <statlist> EOF) = assign, print, read, while, conditional, {
 		switch(look.tag){
-		//GUIDA(prog):
 		case Tag.ASSIGN:
 		case Tag.PRINT:
 		case Tag.READ:
