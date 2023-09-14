@@ -249,6 +249,7 @@ public class Translator { // Un Parser32 adattato.
     }
 
     private void bexpr(int truelabel){
+		int lFalse;
 		switch (look.tag) {
 		case Tag.RELOP:
 			String relatinaloperator = ((Word)look).lexeme;
@@ -283,15 +284,26 @@ public class Translator { // Un Parser32 adattato.
 			break;
 		case Tag.AND:
 			match(Tag.AND);
-			expr();
-			expr();
-			code.emit(OpCode.iand, truelabel);
+
+			int lAnd  = code.newLabel();
+			lFalse = code.newLabel();
+
+			bexpr(lAnd);
+			code.emit(OpCode.GOto,lFalse);
+			code.emitLabel(lAnd);
+			bexpr(truelabel);
+			code.emit(OpCode.GOto,lFalse);
+			code.emitLabel(lFalse);
 			break;
 		case Tag.OR:
 			match(Tag.OR);
-			expr();
-			expr();
-			code.emit(OpCode.ior, truelabel);
+
+			lFalse = code.newLabel();
+
+			bexpr(truelabel);
+			bexpr(truelabel);
+			code.emit(OpCode.GOto,lFalse);
+			code.emitLabel(lFalse);
 			break;
 		default:
 			error("Is not a relational operator");
