@@ -96,7 +96,6 @@ public class Translator { // Un Parser32 adattato.
 			break;
 		case '}':
 		case Tag.EOF:
-		case Tag.END:
 			break;
 		default:
 			error("unexpected stat inside the statlist.");
