@@ -5,8 +5,8 @@ public class SymbolTable {
     Map <String, Integer> OffsetMap = new HashMap <String,Integer>();
 
     /*
-     *abbiamo modificato queste funzione per passare un token invece di una stringa.
-     *Pensiamo che sarebbe meglio evitare la ripettizione del cast nel Translator,
+     *abbiamo modificato queste funzioni per passare un token invece di una stringa.
+     *Pensiamo che sarebbe meglio evitare le ripetizioni del cast nel Translator,
      *affinche il Transaltor sia più facile da leggere.
      */
     public String legge(Token t){
