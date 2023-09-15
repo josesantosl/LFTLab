@@ -170,7 +170,7 @@ public class Translator { // Un Parser32 adattato.
 		if(look.tag == Tag.ID){
 			int address = st.lookupAddress(look);
 			if (address == -1) {
-				st.insert(((Word)look).lexeme,count);
+				st.insert(look,count);
 				address = count++;
 			}
 

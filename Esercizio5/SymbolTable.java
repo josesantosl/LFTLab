@@ -4,23 +4,26 @@ public class SymbolTable {
 
     Map <String, Integer> OffsetMap = new HashMap <String,Integer>();
 
-    public void insert( String s, int address ) {
-	if( !OffsetMap.containsValue(address) ) 
-	    OffsetMap.put(s,address);
-	else 
-	    throw new IllegalArgumentException("Reference to a memory location already occupied by another variable");
+    /*
+     *abbiamo modificato queste funzione per passare un token invece di una stringa.
+     *Pensiamo che sarebbe meglio evitare la ripettizione del cast nel Translator,
+     *affinche il Transaltor sia più facile da leggere.
+     */
+    public String legge(Token t){
+        return ((Word)t).lexeme;
     }
 
-    /*Voglio modificare questa funzione per passare un token invece di una
-      stringa. So non c'e bisogno ma penso che sarebbe meglio evitare la
-      repetizione nel translator, anche questo lo fa molto piu' facile da leggere
-      il Translator. Penso che non è un cambio grande nel codice e spero non sia
-      un problmea al momento dell'interrogazione.
-    */
+    public void insert( Token t, int address ) {
+        if( !OffsetMap.containsValue(address) )
+            OffsetMap.put(legge(t),address);
+        else
+            throw new IllegalArgumentException("Reference to a memory location already occupied by another variable");
+    }
+
     public int lookupAddress ( Token t ) {
         try{
-            if( OffsetMap.containsKey(((Word)t).lexeme))
-                return OffsetMap.get(((Word)t).lexeme);
+            if( OffsetMap.containsKey(legge(t)))
+                return OffsetMap.get(legge(t));
             else
                 return -1;
         }catch(ClassCastException e){
