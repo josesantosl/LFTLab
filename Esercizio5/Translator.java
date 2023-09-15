@@ -363,10 +363,11 @@ public class Translator { // Un Parser32 adattato.
 
 			lFalse = code.newLabel();
 
-			bexpr(lfalse);
-			bexpr(lfalse);
+			//!(A and B) = !A or !B
+			bexpr(lFalse);
+			bexpr(lFalse);
 			code.emit(OpCode.GOto,truelabel);
-			code.emitLabel(lfalse);
+			code.emitLabel(lFalse);
 			break;
 		case Tag.OR:
 			//invertiti i label del or. cosi se uno di loro è vero va a false,
@@ -374,8 +375,8 @@ public class Translator { // Un Parser32 adattato.
 			match(Tag.OR);
 			lFalse = code.newLabel();
 
-			bexpr(lfalse);
-			bexpr(lfalse);
+			bexpr(lFalse);
+			bexpr(lFalse);
 			code.emit(OpCode.GOto,truelabel);
 			code.emitLabel(lFalse);
 			break;
