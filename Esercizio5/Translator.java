@@ -206,6 +206,7 @@ public class Translator { // Un Parser32 adattato.
 		case '}':
 		case ';':
 		case Tag.EOF:
+		case Tag.END:
 			break;
 		default:
 			error("no identifier was found.");
