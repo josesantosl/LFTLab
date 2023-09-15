@@ -283,6 +283,8 @@ public class Translator { // Un Parser32 adattato.
 			case "<>":
 				code.emit(OpCode.if_icmpne,truelabel);
 				break;
+			default:
+				error("unrecognized relational operator");
 			}
 
 			break;
@@ -321,29 +323,64 @@ public class Translator { // Un Parser32 adattato.
     }
 
     private void negbexpr(int truelabel){
-		String relatinaloperator = ((Word)look).lexeme;
-		match(Tag.RELOP);
-		expr();
-		expr();
-		switch (relatinaloperator) {
-		case ">":
-			code.emit(OpCode.if_icmple,truelabel);// <=
+		int lFalse; //per i casi dove dobbiamo controllare sia vero o falso (AND e OR)
+		switch (look.tag) {
+		case Tag.RELOP:
+			String relatinaloperator = ((Word)look).lexeme;
+			match(Tag.RELOP);
+			expr();
+			expr();
+			switch (relatinaloperator) {
+			case ">":
+				code.emit(OpCode.if_icmple,truelabel);// <=
+				break;
+			case "<":
+				code.emit(OpCode.if_icmpge,truelabel);// >=
+				break;
+			case "<=":
+				code.emit(OpCode.if_icmpgt,truelabel);// >
+				break;
+			case ">=":
+				code.emit(OpCode.if_icmplt,truelabel);// <
+				break;
+			case "==":
+				code.emit(OpCode.if_icmpne,truelabel);// <>
+				break;
+			case "<>":
+				code.emit(OpCode.if_icmpeq,truelabel);// ==
+				break;
+			default:
+				error("unrecognized relational operator");
+			}
+		case '!':
+			match('!');
+			bexpr(truelabel); // !!<bexpr> = <bexpr>
 			break;
-		case "<":
-			code.emit(OpCode.if_icmpge,truelabel);// >=
+		case Tag.AND:
+			//invertiti i label del and. Cosi se entrambi sono veri va a false,
+			//se no va a true.
+			match(Tag.AND);
+
+			lFalse = code.newLabel();
+
+			bexpr(lfalse);
+			bexpr(lfalse);
+			code.emit(OpCode.GOto,truelabel);
+			code.emitLabel(lfalse);
 			break;
-		case "<=":
-			code.emit(OpCode.if_icmpgt,truelabel);// >
+		case Tag.OR:
+			//invertiti i label del or. cosi se uno di loro è vero va a false,
+			//se no va a true.
+			match(Tag.OR);
+			lFalse = code.newLabel();
+
+			bexpr(lfalse);
+			bexpr(lfalse);
+			code.emit(OpCode.GOto,truelabel);
+			code.emitLabel(lFalse);
 			break;
-		case ">=":
-			code.emit(OpCode.if_icmplt,truelabel);// <
-			break;
-		case "==":
-			code.emit(OpCode.if_icmpne,truelabel);// <>
-			break;
-		case "<>":
-			code.emit(OpCode.if_icmpeq,truelabel);// ==
-			break;
+		default:
+			error("Is not a relational operator");
 		}
 	}
 
