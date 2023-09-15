@@ -174,12 +174,13 @@ public class Translator { // Un Parser32 adattato.
 				address = count++;
 			}
 
+			match(Tag.ID);
+
 			if (op == Tag.READ) {
 				code.emit(OpCode.invokestatic,0);//invokestatic READ
 			}
 
-			code.emit(OpCode.istore,address);
-			match(Tag.ID);
+			code.emit(OpCode.istore,address); // Salva il valore
 
 			if (look.tag == ',' && op == Tag.ASSIGN) {
 				code.emit(OpCode.iload,address);
