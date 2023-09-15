@@ -224,9 +224,9 @@ public class Translator { // Un Parser32 adattato.
     }
 
 	private void optlistp(int lendCondition){
-		// GUIDA(<optlist> -> <optitem><optlistp>) = option
-		// GUIDA(<optlist> -> eps) = ]
-		//FOLLOW(optlist) = {'option',']'}
+		// GUIDA(<optlistp> -> <optitem><optlistp>) = option
+		// GUIDA(<optlistp> -> eps) = ]
+		// FOLLOW(optlistp) = {'option',']'}
 		switch(look.tag){
 		case Tag.OPTION:
 			optlist(lendCondition);
