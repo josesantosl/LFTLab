@@ -352,6 +352,7 @@ public class Translator { // Un Parser32 adattato.
 			default:
 				error("unrecognized relational operator");
 			}
+			break;
 		case '!':
 			match('!');
 			bexpr(truelabel); // !!<bexpr> = <bexpr>
