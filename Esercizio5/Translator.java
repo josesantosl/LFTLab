@@ -140,6 +140,7 @@ public class Translator { // Un Parser32 adattato.
 			match('[');
 			optlist(lendCondition);
 			match(']');
+
 			switch (look.tag) {
 			case Tag.ELSE: // GUIDA(<stat> -> conditional[<optlist>]else<stat>end) = conditional
 				match(Tag.ELSE);
@@ -152,6 +153,7 @@ public class Translator { // Un Parser32 adattato.
 				error("unclosed OPTION");
 			}
 			break;
+
 		case '{': // GUIDA(<stat> -> {<statlist>}) = {
 			match('{');
 			statlist();
@@ -171,6 +173,7 @@ public class Translator { // Un Parser32 adattato.
 				st.insert(((Word)look).lexeme,count);
 				address = count++;
 			}
+
 			if (op == Tag.READ) {
 				code.emit(OpCode.invokestatic,0);//invokestatic READ
 			}
@@ -241,9 +244,10 @@ public class Translator { // Un Parser32 adattato.
 		match('(');
 		bexpr(ltrue);
 		match(')');
+		match(Tag.DO);
+
 		code.emit(OpCode.GOto,lnext);
 		code.emitLabel(ltrue);
-		match(Tag.DO);
 		stat();
 		code.emit(OpCode.GOto,lendCondition);
 		code.emitLabel(lnext);
@@ -290,7 +294,7 @@ public class Translator { // Un Parser32 adattato.
 			match(Tag.AND);
 
 			int lAnd  = code.newLabel();
-			lFalse = code.newLabel();
+			lFalse    = code.newLabel();
 
 			bexpr(lAnd);
 			code.emit(OpCode.GOto,lFalse);
