@@ -1,12 +1,12 @@
 11:
-	javac TreZeri.java
+	javac Es11.java
 	@echo "==== VALID TESTS ===="
 	java Es11 "010101"
-	java Es11 "1100011001"
 	@echo "=== INVALID TESTS ==="
+	java Es11 "1100011001"
 	java Es11 "10214"
 12:
-	javac indentificatore.java
+	javac Es.java
 	@echo "==== VALID TESTS ===="
 	java Es12 "x"
 	java Es12 "flag1"

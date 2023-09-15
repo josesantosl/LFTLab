@@ -42,7 +42,7 @@ public class Es11{
 				break;
 			}
 		}
-		return state == 3;
+		return state != 3 && state >= 0;
     }
 
     public static void main(String[] args){
