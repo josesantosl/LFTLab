@@ -8,7 +8,7 @@ public class Es12 {
       +-----------------+
       |->0  |-1 | 2 | 1 |
       |  1  | 2 | 2 | 1 |
-      |  2  | 2 | 2 | 2 | 
+      | *2  | 2 | 2 | 2 |
     */
     public static boolean identificador(String s){
 		int state=0;//stato presente
