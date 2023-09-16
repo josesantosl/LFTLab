@@ -364,23 +364,31 @@ public class Translator { // Un Parser32 adattato.
 
 			lFalse = code.newLabel();
 
-			//!(A and B) = !A or !B
-			bexpr(lFalse);
-			bexpr(lFalse);
+			int lAnd  = code.newLabel();
+			lFalse    = code.newLabel();
+
+			//!(A and B)
+			bexpr(lAnd);
 			code.emit(OpCode.GOto,truelabel);
-			code.emitLabel(lFalse);
+			code.emitLabel(lAnd);
+			bexpr(lfalse);
+			code.emit(OpCode.GOto,truelabel);
+			code.emitLabel(truelabel);
 			break;
+
 		case Tag.OR:
-			//invertiti i label del or. cosi se uno di loro è vero va a false,
+			//invertiti i label del or
 			//se no va a true.
 			match(Tag.OR);
-			lFalse = code.newLabel();
+			lFalse  = code.newLabel();
 
+			//!(A or B)
 			bexpr(lFalse);
 			bexpr(lFalse);
 			code.emit(OpCode.GOto,truelabel);
 			code.emitLabel(lFalse);
 			break;
+
 		default:
 			error("Is not a relational operator");
 		}
