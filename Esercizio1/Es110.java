@@ -18,44 +18,48 @@ public class Es110 {
 			final int numchar = Character.getNumericValue(ch); //numericValue Char
 			switch (state) {
 			case 0:
-				if(ch=='/')
+				if(ch=='/'){
 					state=1;
-				else if(ch=='*')
+				}else if(ch=='*'){
 					state=0;
-				else if(ch=='a')
+				}else if(ch=='a'){
 					state=0;
-				else
+				}else{
 					state=-1;
+				}
 				break;
 			case 1:
-				if(ch=='/')
+				if(ch=='/'){
 					state=0;
-				else if(ch=='*')
+				}else if(ch=='*'){
 					state=2;
-				else if(ch=='a')
+				}else if(ch=='a'){
 					state=0;
-				else
+				}else{
 					state=-1;
+				}
 				break;
 			case 2:
-				if(ch=='/')
+				if(ch=='/'){
 					state=2;
-				else if(ch=='*')
+				}else if(ch=='*'){
 					state=3;
-				else if(ch=='a')
+				}else if(ch=='a'){
 					state=2;
-				else
+				}else{
 					state=-1;
+				}
 				break;
 			case 3:
-				if(ch=='/')
+				if(ch=='/'){
 					state=0;
-				else if(ch=='*')
+				}else if(ch=='*'){
 					state=3;
-				else if(ch=='a')
+				}else if(ch=='a'){
 					state=2;
-				else
+				}else{
 					state=-1;
+				}
 				break;
 			}
 
