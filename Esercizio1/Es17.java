@@ -8,8 +8,9 @@ public class Es17 {
         while( state >= 0 && i < orig.length()){
             final char chO = orig.charAt(i);
             final char chP = prov.charAt(i);
-            if(chO != chP)
+            if(chO != chP){
                 state++;
+            }
 
             state++;
             i++;
