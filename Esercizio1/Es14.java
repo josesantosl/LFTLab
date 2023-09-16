@@ -51,13 +51,13 @@ public class Es14 {
 			//stato dispari
 			if( ch == ' ')
 				state = 3;
-		else if(Character.isDigit(ch)){
-		    if( numchar%2 != 0)
-				state = 1;
-		    else
-				state = 2;
-		}else
-		    state = -1;
+			else if(Character.isDigit(ch)){
+				if( numchar%2 != 0)
+					state = 1;
+				else
+					state = 2;
+			}else
+				state = -1;
 			break;
 
 
