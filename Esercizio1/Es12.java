@@ -2,7 +2,7 @@ public class Es12 {
     /*
       CONDIZIONI IDENTIFICATORE:
       - non comincia con un numero 
-      - bib puo essere composto solo di simboli _.
+      - non puo essere composto solo di simboli _.
 
       |stato|num|let|und|
       +-----------------+
