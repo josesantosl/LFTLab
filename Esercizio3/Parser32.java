@@ -12,182 +12,183 @@ public class Parser32 {
 
     void move() {
         look = lex.lexical_scan(pbr);
-	if(look.tag == ';')
-	    System.out.println(look+ " ");
-	else
-	    System.out.print(look+ " ");
+        if(look.tag == ';')
+            System.out.println(look+ " ");
+        else
+            System.out.print(look+ " ");
     }
 
     void error(String s) {
-	throw new Error("near line " + lex.line + ":"+ look.tag+": " + s);
+        throw new Error("near line " + lex.line + ":"+ look.tag+": " + s);
     }
 
     void match(int t) {
-	if (look.tag == t) {
-	    if (look.tag != Tag.EOF) move();
-	} else error("syntax error");
+        if (look.tag == t) {
+            if (look.tag != Tag.EOF) move();
+        } else error("syntax error");
     }
 
     void prog(){
-	statlist();
-	match(Tag.EOF);
+        statlist();
+        match(Tag.EOF);
     }
+
     void statlist(){
-	stat();
-	statlistp();
+        stat();
+        statlistp();
     }
 
     void statlistp(){
-	if(look.tag == ';'){
-	    match(';');
-	    stat();
-	    statlistp();
-	}
+        if(look.tag == ';'){
+            match(';');
+            stat();
+            statlistp();
+        }
     }
 
     void stat(){
-	switch (look.tag) { 
-	case Tag.ASSIGN: //assign 5 to a,b,c
-	    match(Tag.ASSIGN);
-	    expr();
-	    match(Tag.TO);
-	    idlist();
-	    break;
-	case Tag.PRINT:
-	    match(Tag.PRINT);
-	    match('[');
-	    exprlist();
-	    match(']');
-	    break;
-	case Tag.READ: //read[a,b,c] 
-	    match(Tag.READ);
-	    match('[');
-	    idlist();
-	    match(']');
-	    break;
-	case Tag.WHILE:
-	    match(Tag.WHILE);
-	    match('(');
-	    bexpr();
-	    match(')');
-	    stat();
-	    break;
-	case Tag.COND:
-	    match(Tag.COND);
-	    match('[');
-	    optlist();
-	    match(']');
-	    switch (look.tag) {
-	    case Tag.ELSE:
-		match(Tag.ELSE);
-		stat();
-	    case Tag.END:
-		match(Tag.END);
-		break;
-	    default:
-		error("not ended conditional");
+        switch (look.tag) {
+        case Tag.ASSIGN: //assign 5 to a,b,c
+            match(Tag.ASSIGN);
+            expr();
+            match(Tag.TO);
+            idlist();
+            break;
+        case Tag.PRINT:
+            match(Tag.PRINT);
+            match('[');
+            exprlist();
+            match(']');
+            break;
+        case Tag.READ: //read[a,b,c]
+            match(Tag.READ);
+            match('[');
+            idlist();
+            match(']');
+            break;
+        case Tag.WHILE:
+            match(Tag.WHILE);
+            match('(');
+            bexpr();
+            match(')');
+            stat();
+            break;
+        case Tag.COND:
+            match(Tag.COND);
+            match('[');
+            optlist();
+            match(']');
+            switch (look.tag) {
+            case Tag.ELSE:
+                match(Tag.ELSE);
+                stat();
+            case Tag.END:
+                match(Tag.END);
+                break;
+            default:
+                error("not ended conditional");
 
-	    }
-	    break;
-	case '{':
-	    match('{');
-	    statlist();
-	    match('}');
-	    break;
-	default:
-	    error("not valid stat");
-	}
+            }
+            break;
+        case '{':
+            match('{');
+            statlist();
+            match('}');
+            break;
+        default:
+            error("not valid stat");
+        }
     }
     void idlist(){
-	match(Tag.ID);
-	idlistp();
+        match(Tag.ID);
+        idlistp();
     }
     void idlistp(){
-	if(look.tag == ','){
-	    match(',');
-	    match(Tag.ID);
-	    idlistp();
-	}
+        if(look.tag == ','){
+            match(',');
+            match(Tag.ID);
+            idlistp();
+        }
     }
 
     void optlist(){
-	optitem();
-	optlistp();
+        optitem();
+        optlistp();
     }
     void optlistp(){
-	if(look.tag == Tag.OPTION){
-	    optitem();
-	    optlistp();
-	}
+        if(look.tag == Tag.OPTION){
+            optitem();
+            optlistp();
+        }
     }
 
     void optitem(){
-	match(Tag.OPTION);
-	match('(');
-	bexpr();
-	match(')');
-	match(Tag.DO);
-	stat();
+        match(Tag.OPTION);
+        match('(');
+        bexpr();
+        match(')');
+        match(Tag.DO);
+        stat();
     }
 
     void bexpr(){
-	switch (look.tag) {
-	case Tag.RELOP: // ==,>=,<=,>,< 
-	    match(Tag.RELOP);
-	    expr();
-	    expr();
-	    break;
-	case '!':  // !true = false | !false = true
-	    match('!');
-	    bexpr();
-	    break;
-	case Tag.AND:
-	case Tag.OR:
-	    match(look.tag);
-	    bexpr();
-	    bexpr();
-	    break;
-	default:
-	    error("unexpected boolean expression");
-	}
+        switch (look.tag) {
+        case Tag.RELOP: // ==,>=,<=,>,<
+            match(Tag.RELOP);
+            expr();
+            expr();
+            break;
+        case '!':  // !true = false | !false = true
+            match('!');
+            bexpr();
+            break;
+        case Tag.AND:
+        case Tag.OR:
+            match(look.tag);
+            bexpr();
+            bexpr();
+            break;
+        default:
+            error("unexpected boolean expression");
+        }
 
     }
 
     void expr(){
-	switch (look.tag) {
-	case '+':
-	case '*':
-	    match(look.tag);
-	    match('(');
-	    exprlist();
-	    match(')');
-	    break;
-	case '-':
+        switch (look.tag) {
+        case '+':
+        case '*':
+            match(look.tag);
+            match('(');
+            exprlist();
+            match(')');
+            break;
+        case '-':
 	case '/':
 	    match(look.tag);
 	    expr();
 	    expr();
 	    break;
-	case Tag.NUM:
+        case Tag.NUM:
 	case Tag.ID:
 	    match(look.tag);
 	    break;
-	default:
-	    error("Invalid Expresion");
-	}
+        default:
+            error("Invalid Expresion");
+        }
 
     }
 
     void exprlist(){
-	expr();
-	exprlistp();
+        expr();
+        exprlistp();
     }
     void exprlistp(){
-	if(look.tag == ','){
-	    match(',');
-	    expr();
-	    exprlistp();
-	}
+        if(look.tag == ','){
+            match(',');
+            expr();
+            exprlistp();
+        }
     }
 
     public static void main(String[] args) {
