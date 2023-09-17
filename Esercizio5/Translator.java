@@ -371,9 +371,9 @@ public class Translator { // Un Parser32 adattato.
 			bexpr(lAnd);
 			code.emit(OpCode.GOto,truelabel);
 			code.emitLabel(lAnd);
-			bexpr(lfalse);
+			bexpr(lFalse);
 			code.emit(OpCode.GOto,truelabel);
-			code.emitLabel(truelabel);
+			code.emitLabel(lFalse);
 			break;
 
 		case Tag.OR:
