@@ -313,12 +313,8 @@ public class Translator { // Un Parser32 adattato.
 		case Tag.OR:
 			match(Tag.OR);
 
-			lFalse = code.newLabel();
-
 			bexpr(truelabel);
 			bexpr(truelabel);
-			code.emit(OpCode.GOto,lFalse);
-			code.emitLabel(lFalse);
 			break;
 		default:
 			error("Is not a relational operator");
