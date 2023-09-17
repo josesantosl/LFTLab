@@ -127,9 +127,21 @@ public class Translator { // Un Parser32 adattato.
 			break;
 		case Tag.WHILE:
 			match(Tag.WHILE); // GUIDA(<stat> -> while(<bexpr>)<stat>) = while
-			int startloop  = code.newLabel();
+			/*
+			 * Quando si fa option (bexpr) do while ....
+			 * ci troviamo con 2 label consecutivi. per evitarlo facciamo di guardare se
+			 * l'ultima istruzione sia un label. in quel caso si assegna l'ultimo label
+			 * come startloop.
+			 */
+			int startloop;
+			if (code.instructions.getLast().opCode == OpCode.label){
+				startloop  = code.instructions.getLast().operand;
+			}else{
+				startloop  = code.newLabel();
+				code.emitLabel(startloop);
+			}
+
 			int endwhile   = code.newLabel();
-			code.emitLabel(startloop);
 			match('(');
 			negbexpr(endwhile); // ! bexpr
 			match(')');
