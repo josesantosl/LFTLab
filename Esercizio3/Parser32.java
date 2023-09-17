@@ -164,15 +164,15 @@ public class Parser32 {
             match(')');
             break;
         case '-':
-	case '/':
-	    match(look.tag);
-	    expr();
-	    expr();
-	    break;
+        case '/':
+            match(look.tag);
+            expr();
+            expr();
+            break;
         case Tag.NUM:
-	case Tag.ID:
-	    match(look.tag);
-	    break;
+        case Tag.ID:
+            match(look.tag);
+            break;
         default:
             error("Invalid Expresion");
         }
