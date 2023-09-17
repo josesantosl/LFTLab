@@ -74,9 +74,12 @@ public class Translator { // Un Parser32 adattato.
 		case Tag.COND:
 		case '{':
 			stat();
+			/*
+			Non c'è bisogno di un label per ogni stat.
 			int lnext = code.newLabel();
 			code.emit(OpCode.GOto,lnext);
 			code.emitLabel(lnext);
+			*/
 			statlistp();
 			break;
 		case Tag.EOF:
