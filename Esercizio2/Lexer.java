@@ -121,7 +121,6 @@ public class Lexer {
                 peek = ' ';
                 return Word.ne;
             } else {
-                //System.err.println("Erroneous character after < : "  + peek );
                 return Word.lt;
             }
 
@@ -131,7 +130,6 @@ public class Lexer {
                 peek = ' ';
                 return Word.ge;
             } else {
-                //System.err.println("Erroneous character after > : "  + peek );
                 return Word.gt;
             }
 
